@@ -13,7 +13,6 @@ import java.util.Map;
 public class Document {
     private Map<String, Double> wordCounts = new HashMap<>();
     private double totalNumberOfWords = 0;
-    private String mostFrequentWord;
     private double occurrencesOfMostFrequentWord = 0;
 
     public Document(String filename) {
@@ -29,7 +28,6 @@ public class Document {
                         double oldCount = wordCounts.get(word);
                         if (oldCount + 1 > occurrencesOfMostFrequentWord) {
                             occurrencesOfMostFrequentWord = oldCount + 1;
-                            mostFrequentWord = word;
                         }
                         wordCounts.put(word, oldCount + 1);
                     } else {
@@ -50,7 +48,7 @@ public class Document {
     }
 
     public double tf(String term) {
-        return (wordCounts.get(term) / totalNumberOfWords) / (occurrencesOfMostFrequentWord / totalNumberOfWords);
+        return wordCounts.get(term) / occurrencesOfMostFrequentWord;
     }
 
     private String trim(String string) {
