@@ -1,5 +1,6 @@
 \documentclass[]{scrartcl}
 
+\usepackage{mathtools}
 %opening
 \title{Intelligent Data Management - Exercises}
 \author{Christoph Prinz}
@@ -13,11 +14,22 @@
 
 \subsection{Exercise a}
 
-Term $i$ appears in $n_i$ of the $N$ documents \\\\
-$ (a) IDF_i = log_2(\frac{10000000}{40})$\\
-$ (b) IDF_i = log_2(\frac{10000000}{10000})$
+Term $i$ appears in $n_i$ of the $N$ documents \\
 
+\begin{equation}
+\begin{split}
+IDF_i = log_2(\frac{N}{n_i})\\
+IDF_i = log_2(\frac{10000000}{40})\\
+IDF_i = 12
+\end{split}
+\end{equation}
 
-
+\begin{equation}
+\begin{split}
+IDF_i = log_2(\frac{N}{n_i})\\
+IDF_i = log_2(\frac{10000000}{10000})\\
+IDF_i = 7
+\end{split}
+\end{equation}
 
 \end{document}
