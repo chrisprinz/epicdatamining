@@ -16,7 +16,7 @@ public class Repository {
         double numberOfDocumentsContainingTerm =
                 documents.parallelStream().filter(document -> document.contains(term)).count();
         double totalNumberOfDocuments = documents.size();
-        return Math.log(totalNumberOfDocuments / numberOfDocumentsContainingTerm);
+        return Math.log(totalNumberOfDocuments / numberOfDocumentsContainingTerm) / Math.log(2);
     }
 
     public double tfIdf(String term, Document document) {

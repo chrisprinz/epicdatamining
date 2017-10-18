@@ -32,7 +32,7 @@ problem are presented, a short, and a more complete version:
      * @param n_i number or documents with term i
      */
     static double idf(double N, double n_i) {
-        return Math.log(N / n_i);
+        return Math.log(N / n_i)/Math.log(2);
     }
 
     /**
@@ -45,7 +45,7 @@ problem are presented, a short, and a more complete version:
 
 ```
 
-## Long Solution
+## Complete Solution
 It consists of two classes in an object-oriented approach: `Document` 
 and `Repository`, the implementation of which follow:
 
@@ -130,7 +130,7 @@ public class Repository {
         double numberOfDocumentsContainingTerm =
                 documents.parallelStream().filter(document -> document.contains(term)).count();
         double totalNumberOfDocuments = documents.size();
-        return Math.log(totalNumberOfDocuments / numberOfDocumentsContainingTerm);
+        return Math.log(totalNumberOfDocuments / numberOfDocumentsContainingTerm) / Math.log(2);
     }
 
     public double tfIdf(String term, Document document) {
