@@ -8,7 +8,7 @@ public class Exercise1 {
      * @param n_i number or documents with term i
      */
     static double idf(double N, double n_i) {
-        return Math.log(N / n_i);
+        return Math.log(N / n_i)/Math.log(2);
     }
 
     /**
