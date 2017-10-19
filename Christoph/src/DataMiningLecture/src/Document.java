@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Document {
-
     private Map<String, Integer> wordCount = new HashMap<String, Integer>();
 
     public Document(String path) throws IOException {
@@ -19,9 +18,9 @@ public class Document {
     }
 
     /**
-     * calculate term frequency for a given term
-     * @param term
-     * @return
+     * calculate term frequency for a given term in document
+     * @param term: term w to calculate tf
+     * @return value for tf
      */
     public double get_tf(String term){
         int f_ji = 0;
