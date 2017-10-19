@@ -24,9 +24,13 @@ hs_err_pid*
 # LaTeX
 *.gz
 *.aux
+<<<<<<< HEAD
 *.pdf
 
 # IntelliJ
 *.iml
 .idea/
 out/
+=======
+Christoph/src/DataMiningLecture/.idea/
+>>>>>>> master
