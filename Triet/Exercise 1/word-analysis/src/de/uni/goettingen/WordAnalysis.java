@@ -75,6 +75,6 @@ public class WordAnalysis {
             }
         }
 
-        return Math.log(docs.size() / count);
+        return Math.log(docs.size() / count) / Math.log(2);
     }
 }
