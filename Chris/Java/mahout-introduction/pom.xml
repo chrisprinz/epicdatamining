@@ -5,19 +5,33 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.intelligent.data.management</groupId>
-    <artifactId>Exercise2</artifactId>
+    <artifactId>mahout-introduction</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-core</artifactId>
+            <version>0.9</version>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+            <version>3.8.1</version>
         </dependency>
     </dependencies>
 
