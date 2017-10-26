@@ -19,10 +19,7 @@ public class App {
 
         try {
 
-            URL url = App.class.getResource("data.txt");
-            File file = new File(url.getFile());
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
+            File file = new File("data/data.txt");
             // load data
             DataModel data = new FileDataModel(file);
 
