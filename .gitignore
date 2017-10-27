@@ -27,8 +27,8 @@ hs_err_pid*
 *.pdf
 
 # IntelliJ
+.idea/
 *.iml
-*.idea/
 *out/
 *target/
 *resources/
