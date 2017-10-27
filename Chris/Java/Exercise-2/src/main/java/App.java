@@ -31,13 +31,9 @@ public class App {
     public static void main(String[] args) {
         try {
             initialize();
-
             readDocuments();
             performTFIDF();
-
             printResults();
-
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalStateException | NullPointerException e) {
