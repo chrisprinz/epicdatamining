@@ -96,6 +96,12 @@ public class App
         for (Pair<Writable, Writable> pair : iterable) {
             System.out.format("%10s -> %s\n", pair.getFirst(), pair.getSecond());
         }
+        
+        Path dicFilePath = new Path(outputFolder, "dictionary.file-0");
+        SequenceFileIterable<Writable, Writable> iterableDic = new SequenceFileIterable<Writable, Writable>(dicFilePath, configuration);
+        for (Pair<Writable, Writable> pair : iterableDic) {
+        	System.out.format("%s -> %s\n", pair.getFirst(), pair.getSecond());
+        }
 
     }
 }
