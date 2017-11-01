@@ -28,9 +28,8 @@ public class App
 	private static Configuration configuration;
 	private static FileSystem fileSystem;
 	private static String outputFolder = "output";
-	private static Path seqPath;
-	private static Path tokPath;
-	private static Path dicPath;
+	private static Path documentsSequencePath;
+	private static Path tokenizedDocumentsPath;
 	private static Path tfidfPath;
 	private static Path termFrequencyVectorsPath;
 	
@@ -45,17 +44,18 @@ public class App
     public static void init() throws IOException {
     	configuration = new Configuration();
     	fileSystem = FileSystem.get(configuration);
-    	seqPath = new Path(outputFolder, "seq");
-    	tokPath = new Path(outputFolder, DocumentProcessor.TOKENIZED_DOCUMENT_OUTPUT_FOLDER);
-    	dicPath = new Path(outputFolder, "dic");
-        tfidfPath = new Path(outputFolder, "tfidf");
-        termFrequencyVectorsPath = new Path(outputFolder, DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER);
+        
+        outputFolder = "output/";
+        documentsSequencePath = new Path(outputFolder, "sequence");
+        tokenizedDocumentsPath = new Path(outputFolder, DocumentProcessor.TOKENIZED_DOCUMENT_OUTPUT_FOLDER);
+        tfidfPath = new Path(outputFolder + "tfidf");
+        termFrequencyVectorsPath = new Path(outputFolder + DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER);
     }
     
     public static void readDocuments() throws IOException {
     	File dir = new File("data");
     	File[] files = dir.listFiles();
-    	SequenceFile.Writer writer = new SequenceFile.Writer(fileSystem, configuration, seqPath, Text.class, Text.class);
+    	SequenceFile.Writer writer = new SequenceFile.Writer(fileSystem, configuration, documentsSequencePath, Text.class, Text.class);
     	
     	for (File file : files) {
     		Text key = new Text(file.getName());
@@ -74,9 +74,9 @@ public class App
     }
     
     public static void calculateTFIDF() throws ClassNotFoundException, IOException, InterruptedException {
-        DocumentProcessor.tokenizeDocuments(seqPath, StandardAnalyzer.class, tokPath, configuration);
+        DocumentProcessor.tokenizeDocuments(documentsSequencePath, StandardAnalyzer.class, tokenizedDocumentsPath, configuration);
         
-        DictionaryVectorizer.createTermFrequencyVectors(tokPath, dicPath,
+        DictionaryVectorizer.createTermFrequencyVectors(tokenizedDocumentsPath, new Path(outputFolder),
         		DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER,
                 configuration, 1, 1, 0.0f, PartialVectorMerger.NO_NORMALIZING,
                 true, 1, 100, false, false);
