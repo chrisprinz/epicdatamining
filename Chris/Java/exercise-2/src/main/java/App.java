@@ -4,6 +4,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.FloatWritable.Comparator;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.mahout.common.Pair;
 import org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable;
@@ -17,7 +18,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class App {
 
@@ -27,6 +34,8 @@ public class App {
     private static Configuration configuration = new Configuration();
     private static FileSystem fileSystem;
     private static Path documentsSequencePath;
+    private static Map<Integer, String> dictionary = new HashMap<>();
+    private static Map<String, Integer> wordCounts = new HashMap<>();
 
     public static void main(String[] args) {
         try {
@@ -37,7 +46,7 @@ public class App {
 			System.out.println("\n\n\nPerforming TFIDF\n\n\n");
 			//performTFIDF();
 			System.out.println("\n\n\nPrinting results\n\n\n");
-			printResults(TARGET_DIRECTORY);
+			printResults();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalStateException | NullPointerException e) {
@@ -112,29 +121,40 @@ public class App {
         return string.replaceAll("[^A-z\\s]", "").replaceAll("\\s+", " ").concat(" ");
     }
 
-    private static void printResults(String filename) {
-        File dataDirectory = new File(filename);
-        File[] fileArray = dataDirectory.listFiles();
-        if (!dataDirectory.isDirectory()) {
-            throw new IllegalStateException("Target directory path misconfigured, try again.");
-        } else if (fileArray == null) {
-            throw new IllegalStateException("Target directory path empty, try again.");
-        }
-
-        List<File> files = Arrays.asList(fileArray);
-        files.forEach(file -> {
-        	if (file.isDirectory()) {
-        		printResults(file.getPath());
-        	} else if(file.getName().endsWith("00000")) {
-        		Path path = new Path(file.getPath());
-        		SequenceFileIterable<Writable, Writable> iterable = new SequenceFileIterable<>(path, configuration);
-        		for (Pair<Writable, Writable> pair : iterable) {
-        			System.out.format("%10s -> %s\n", pair.getFirst(), pair.getSecond());
-        		}
-        		System.out.println("Finshed File.");
-        	}
-        });
-
-    }
+    private static void printResults() {
+    	Path path;
+    	SequenceFileIterable<Writable, Writable> iterable;
+    	File dictionaryFile = new File(TARGET_DIRECTORY+"/dictionary.file-0");
+		path = new Path(dictionaryFile.getPath());
+		iterable = new SequenceFileIterable<>(path, configuration);
+		for (Pair<Writable, Writable> pair : iterable) {
+			dictionary.put(Integer.parseInt(pair.getSecond().toString()), pair.getFirst().toString());
+		}
+        File wordCountFile = new File(TARGET_DIRECTORY+"/tfidf/tfidf-vectors/part-r-00000");
+		path = new Path(wordCountFile.getPath());
+		iterable = new SequenceFileIterable<>(path, configuration);
+		for (Pair<Writable, Writable> pair : iterable) {
+			String document = pair.getFirst().toString();
+			Map<String, Float> tfIdfs = new HashMap<>();
+			// todo fix regex error
+			String[] tfidfPairs= pair.getSecond().toString().substring(1, pair.getSecond().toString().length() - 2).split(",");
+			Arrays.asList(tfidfPairs).stream().forEach(tfidfPair -> {
+				String[] parts = tfidfPair.split(":");
+				String word = dictionary.get(Integer.parseInt(parts[0]));
+				Float score = Float.parseFloat(parts[1]);
+				tfIdfs.put(word, score);
+			});
+			List sorted = (List) new LinkedList(tfIdfs.entrySet()).stream().sorted((Object object, Object other) -> {
+				Entry<String, Float> entry = (Entry<String,Float>) object;
+				Entry<String, Float> otherEntry = (Entry<String,Float>) other;
+				return (-1) * entry.getValue().compareTo(otherEntry.getValue());
+			}).collect(Collectors.toList());
+			System.out.println(document+"\n");
+			sorted.forEach(System.out::print);
+			
+		}
+		
+		
+	}
 
 }
