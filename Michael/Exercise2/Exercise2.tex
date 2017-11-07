@@ -1,0 +1,84 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english, croatian]{babel}
+\usepackage{listings}
+\usepackage{amsmath}
+
+\title{Intelligent Data Mining - Exercise 2}
+\author{Michael Debono Mrđen}
+\date{1 November 2017}
+
+\begin{document}
+
+\maketitle
+
+\section{Assignment 1: Bonferroni's Principle}
+\renewcommand{\labelenumi}{\alph{enumi}.}
+\renewcommand{\labelenumii}{(\alph{enumii})}
+\begin{enumerate}
+\item{The number of days of observation was raised to 2000.
+\begin{itemize}
+\item{number of pairs of days
+\[ \binom{2000}{2} \approx 2 \times 10^6 \]}
+\item{number of suspected pairs
+\[ 5 \times 10^{17} \times 2 \times 10^6 \times 10^{-18} = 1,000,000 \]}
+\end{itemize}
+}
+
+\item{The number of people observed was raised to 2 billion (and there were therefore 200,000 hotels).
+\begin{itemize}
+\item{number of pairs of people
+\[ \binom{2 \times 10^9}{2} \approx 2 \times 10^{18} \]}
+\item{chance that they will visit the same hotel
+\[ \frac{0.0001}{2 \times 10^5} = 5 \times 10^{-10} \]}
+\item{chance that they will visit the same hotel on two different given days
+\[ (5 \times 10^{-10})^2 = 2.5 \times 10^{-19} \]}
+\item{number of suspected pairs
+\[ 2 \times 10^{18} \times 5 \times 10^5 \times 2.5 \times 10^{-19} = 250,000 \]}
+\end{itemize}
+}
+
+\item{We only reported a pair as suspect if they were at the same hotel at the same time on three different days.
+\begin{itemize}
+\item{chance that they will visit the same hotel on three different given days
+\[ (10^{-9})^3 = 10^{-27} \]}
+\item{number of "triples" of days
+\[ \binom{1000}{3} \approx 1.7 \times 10^8 \]}
+\item{number of suspected pairs
+\[ 5 \times 10^{17} \times 1.7 \times 10^8 \times 10^{-27} = 0.085 \]}
+\end{itemize}
+}
+\end{enumerate}
+
+\section{Assignment 2: Base of the natural logarithm}
+\begin{enumerate}
+\item{In terms of $e$, give approximations to
+\begin{enumerate}
+\item{$(1.01)^{500}$
+\[ = (1 + 0.01)^{500} = e^{0.01 \times 500} = e^5 \]}
+\item{$(1.05)^{1000}$
+\[ = (1 + 0.05)^{1000} = e^{0.05 \times 1000} = e^{50} \]}
+\item{$(0.9)^{40}$
+\[ = (1 - 0.1)^{40} = e^{-0.1 \times 40} = e^{-4} \]}
+\end{enumerate}
+}
+\item{Use the Taylor expansion of $e^x$ to compute, to three decimal places:
+\begin{enumerate}
+\item{$e^{1/10}$
+\[ \approx 1 + \frac{1}{10} + \frac{1}{200} + \frac{1}{6000} + \frac{1}{240000} \approx 1.105 \]
+}
+\item{$e^{-1/10}$
+\[ \approx 1 - \frac{1}{10} + \frac{1}{200} - \frac{1}{6000} + \frac{1}{240000} \approx 0.904 \]
+}
+\item{$e^2$
+\[ \approx 1 + 2 + \frac{4}{2} + \frac{8}{6} + \frac{16}{24} \approx 7.000 \]
+}
+\end{enumerate}
+}
+\end{enumerate}
+
+\section{Assignment 3: TF.IDF with Mahout}
+This assignment is done separately.
+
+\end{document}
+

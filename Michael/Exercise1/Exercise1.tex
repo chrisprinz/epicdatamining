@@ -1,10 +1,11 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage[english, croatian]{babel}
+\usepackage{listings}
 
 \title{Intelligent Data Mining - Exercise 1}
 \author{Michael Debono Mrđen}
-\date{17 October 2017}
+\date{18 October 2017}
 
 \begin{document}
 
@@ -43,5 +44,18 @@ $TF.IDF = 1/3 * 15 \\ = 5$}
 \item{The hash function $h$ will be suitable if $c$ is not equal to the factors of 15, i.e. 3 and 5.}
 \end{enumerate}
 \section{Assignment 2: Implementation}
+\renewcommand{\labelenumi}{\alph{enumi}.}
+\renewcommand{\labelenumii}{(\alph{enumii})}
+\begin{enumerate}
+\item{Main.java: \\
+\lstset{breaklines=true}
+\lstinputlisting[language=Java]{Main.java}
+}
+\item{For the implementation, documents are considered to be a String and a set of documents an array of String.
+
+The method Main.tf() takes a word and a document, both as String's, as the TF function is the frequency of a term or word divided by the maximum frequency of all terms in one document.
+
+The method Main.idf() takes a word as String and a set of documents as an array of String. The IDF function is based on the number of documents in which a term or word appears, which explains the choice of inputs.}
+\end{enumerate}
 
 \end{document}
