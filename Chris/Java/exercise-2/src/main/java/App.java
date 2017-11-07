@@ -30,10 +30,14 @@ public class App {
 
     public static void main(String[] args) {
         try {
+        	System.out.println("\n\n\nInitializing\n\n\n");
             initialize();
-            readDocuments();
-            performTFIDF();
-            printResults();
+        	System.out.println("\n\n\nReading Documents\n\n\n");
+			//readDocuments();
+			System.out.println("\n\n\nPerforming TFIDF\n\n\n");
+			//performTFIDF();
+			System.out.println("\n\n\nPrinting results\n\n\n");
+			printResults(TARGET_DIRECTORY);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalStateException | NullPointerException e) {
@@ -105,11 +109,11 @@ public class App {
     }
 
     private static String trim(String string) {
-        return string.replaceAll("[^A-z\\s]", "").replaceAll("\\s+", " ");
+        return string.replaceAll("[^A-z\\s]", "").replaceAll("\\s+", " ").concat(" ");
     }
 
-    private static void printResults() {
-        File dataDirectory = new File(TARGET_DIRECTORY);
+    private static void printResults(String filename) {
+        File dataDirectory = new File(filename);
         File[] fileArray = dataDirectory.listFiles();
         if (!dataDirectory.isDirectory()) {
             throw new IllegalStateException("Target directory path misconfigured, try again.");
@@ -119,11 +123,16 @@ public class App {
 
         List<File> files = Arrays.asList(fileArray);
         files.forEach(file -> {
-            Path path = new Path(file.getPath());
-            SequenceFileIterable<Writable, Writable> iterable = new SequenceFileIterable<>(path, configuration);
-            for (Pair<Writable, Writable> pair : iterable) {
-                System.out.format("%10s -> %s\n", pair.getFirst(), pair.getSecond());
-            }
+        	if (file.isDirectory()) {
+        		printResults(file.getPath());
+        	} else if(file.getName().endsWith("00000")) {
+        		Path path = new Path(file.getPath());
+        		SequenceFileIterable<Writable, Writable> iterable = new SequenceFileIterable<>(path, configuration);
+        		for (Pair<Writable, Writable> pair : iterable) {
+        			System.out.format("%10s -> %s\n", pair.getFirst(), pair.getSecond());
+        		}
+        		System.out.println("Finshed File.");
+        	}
         });
 
     }
