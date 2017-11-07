@@ -76,3 +76,47 @@ number of sales` and `x: rank of books by sales`
 
 Mathew Effect
   :Strong features are likely to be strengthened further
+
+# Finding Similar Items
+
+## Applications of Near-Neighbor Search
+
+### Jaccard Similarity of Sets
+Similarity defined as Relative Size of Intersection
+  : intersection of two sets / union of two sets (maximum: 1)
+
+### Jaccard Similarity of Bags
+- intersection size = minimum number of occurrences in both bags
+- union size: sum of occurrences (intersections are counted twice)
+- maximum similarity: 1/2
+### Similarity of Documents
+- only considering syntax level, not semantics
+- used for finding (near) duplicates (e.g.)
+- applications:
+    - plagiarism (similarity between documents)
+    - online shopping (similarity between customers)
+    - movie ratings (similarity between movies)
+
+### Collaborative Filtering as a Similar-Sets Problem
+
+## Shingling of Documents
+
+### k-Shingles (=k-gram)
+- using shingles on character level poses some difficulties (e.g.
+whitespaces), but has the advantage of ignoring possible typos
+
+### Choosing the Shingle Size
+- depends on size of documents and alphabet
+- should be as small as possible to be little complex
+- should be big enough so that not all shingles appear in all documents
+- consider average frequency of alphabet-parts
+- rule of thumb for standard english: `k=5`
+
+### Hashing Shingles
+- assumes that many shingles are unlikely
+- reduces needed storage size
+
+### Shingles Built from Words
+
+
+## Similarity-Preserving Summaries of Sets
