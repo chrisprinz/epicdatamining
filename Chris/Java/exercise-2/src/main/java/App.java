@@ -135,19 +135,19 @@ public class App {
 		iterable = new SequenceFileIterable<>(path, configuration);
 		for (Pair<Writable, Writable> pair : iterable) {
 			String document = pair.getFirst().toString();
-			Map<String, Long> tfIdfs = new HashMap<>();
+			Map<String, Float> tfIdfs = new HashMap<>();
 			// todo fix regex error
-			String[] tfidfPairs= pair.getSecond().toString().replaceAll("{", "").replaceAll("}", "").split(",");
+			String[] tfidfPairs= pair.getSecond().toString().substring(1, pair.getSecond().toString().length() - 2).split(",");
 			Arrays.asList(tfidfPairs).stream().forEach(tfidfPair -> {
 				String[] parts = tfidfPair.split(":");
 				String word = dictionary.get(Integer.parseInt(parts[0]));
-				Long score = Long.parseLong(parts[1]);
+				Float score = Float.parseFloat(parts[1]);
 				tfIdfs.put(word, score);
 			});
 			List sorted = (List) new LinkedList(tfIdfs.entrySet()).stream().sorted((Object object, Object other) -> {
-				Entry<String, Long> entry = (Entry<String,Long>) object;
-				Entry<String, Long> otherEntry = (Entry<String,Long>) other;
-				return entry.getValue().compareTo(otherEntry.getValue());
+				Entry<String, Float> entry = (Entry<String,Float>) object;
+				Entry<String, Float> otherEntry = (Entry<String,Float>) other;
+				return (-1) * entry.getValue().compareTo(otherEntry.getValue());
 			}).collect(Collectors.toList());
 			System.out.println(document+"\n");
 			sorted.forEach(System.out::print);
