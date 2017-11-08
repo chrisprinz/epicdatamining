@@ -1,10 +1,11 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage[english, croatian]{babel}
+\usepackage[T1,OT1]{fontenc}
+\usepackage{lmodern}
 \usepackage{listings}
 
 \title{Intelligent Data Mining - Exercise 1}
-\author{Michael Debono Mrđen}
+\author{\fontencoding{T1}\selectfont Michael Debono Mrđen}
 \date{18 October 2017}
 
 \begin{document}
@@ -49,7 +50,7 @@ $TF.IDF = 1/3 * 15 \\ = 5$}
 \begin{enumerate}
 \item{Main.java: \\
 \lstset{breaklines=true}
-\lstinputlisting[language=Java]{Main.java}
+\lstinputlisting[language=Java]{java/src/Main.java}
 }
 \item{For the implementation, documents are considered to be a String and a set of documents an array of String.
 
