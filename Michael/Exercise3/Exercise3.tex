@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1,OT1]{fontenc}
+\usepackage{lmodern}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage[none]{hyphenat}
+
+\title{Intelligent Data Mining - Exercise 3}
+\author{\fontencoding{T1}\selectfont Michael Debono Mrđen}
+\date{8 November 2017}
+
+\begin{document}
+
+\maketitle
+
+\section{Assignment 1: Jaccard Similarity}
+\renewcommand{\labelenumi}{\alph{enumi}.}
+\renewcommand{\labelenumii}{(\alph{enumii})}
+
+\begin{enumerate}
+\item{Compute the Jaccard similarities of each pair of the following three sets.
+	\begin{itemize}
+		\item{$\text{\small SIM} (\{1,2,3,4\}, \{2,3,5,7\})$
+		    \[ = |\{1,2,3,4\} \cap \{2,3,5,7\}| / |\{1,2,3,4\} \cup \{2,3,5,7\}| = 2/6 = 1/3 \]}
+		\item{$\text{\small SIM} (\{2,3,5,7\}, \{2,4,6\})$
+			\[ = |\{2,3,5,7\} \cap \{2,4,6\}| / |\{2,3,5,7\} \cup \{2,4,6\}| = 1/6 \]}
+		\item{$\text{\small SIM}(\{1,2,3,4\}, \{2,4,6\})$
+			\[ = |\{1,2,3,4\} \cap \{2,4,6\}| / |\{1,2,3,4\} \cup \{2,4,6\}| = 2/5 \]}
+	\end{itemize}
+}
+\item{Compute the Jaccard bag similarity of each pair of the following three bags.
+	\begin{itemize}
+		\item{$\text{\small SIM}_{\text{bag}} (\{1,1,1,2\}, \{1,1,2,2,3\})$
+			\[ = |\{1,1,1,2\} \cap \{1,1,2,2,3\}| / |\{1,1,1,2\} \cup \{1,1,2,2,3\}| = 3/9 = 1/3 \]}
+		\item{$\text{\small SIM}_{\text{bag}} (\{1,1,2,2,3\}, \{1,2,3,4\})$
+			\[ = |\{1,1,2,2,3\} \cap \{1,2,3,4\}| / |\{1,1,2,2,3\} \cup \{1,2,3,4\}| = 3/9 = 1/3 \]}
+		\item{$\text{\small SIM}_{\text{bag}} (\{1,1,1,2\}, \{1,2,3,4\})$
+			\[ = |\{1,1,1,2\} \cap \{1,2,3,4\}| / |\{1,1,1,2\} \cup \{1,2,3,4\}| = 2/8 = 1/4 \]}
+	\end{itemize}
+}
+\end{enumerate}
+
+\section{Assignment 2: Shingling}
+\begin{enumerate}
+\item{What are the first ten 3-shingles in the first sentence of Section 3.2?}
+\item{If we use the stop-word-based shingles of Section 3.2.4, and we take the stop words to be all the words of three or fewer letters, then what are the shingles in the first sentence of Section 3.2?}
+\end{enumerate}
+
+\section{Assignment 3: Jaccard similarity with Mahout}
+This assignment is done separately.
+
+\end{document}
