@@ -1,0 +1,4 @@
+target/
+mahout.jaccard.iml
+.idea/
+src/test/
