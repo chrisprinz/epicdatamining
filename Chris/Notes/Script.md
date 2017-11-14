@@ -11,7 +11,7 @@ most extreme features of the data.
 
 ### Computational Approaches
 
-### Summarization
+### Summary
 
 ### Feature Extraction
 
@@ -77,9 +77,13 @@ number of sales` and `x: rank of books by sales`
 Mathew Effect
   :Strong features are likely to be strengthened further
 
+***
+
 # Finding Similar Items
+**TODO**
 
 ## Applications of Near-Neighbor Search
+**TODO**
 
 ### Jaccard Similarity of Sets
 Similarity defined as Relative Size of Intersection
@@ -98,8 +102,10 @@ Similarity defined as Relative Size of Intersection
     - movie ratings (similarity between movies)
 
 ### Collaborative Filtering as a Similar-Sets Problem
+**TODO**
 
 ## Shingling of Documents
+**TODO**
 
 ### k-Shingles (=k-gram)
 - using shingles on character level poses some difficulties (e.g.
@@ -117,6 +123,52 @@ whitespaces), but has the advantage of ignoring possible typos
 - reduces needed storage size
 
 ### Shingles Built from Words
-
+**TODO**
 
 ## Similarity-Preserving Summaries of Sets
+- Applying Jaccard Similarity on shingles of documents might lead to too
+many large sets
+- instead estimate similarity based on signatures
+- --> estimate Jaccard similarity by computing the fraction of rows in
+the signature matrix that agree
+
+**Characteristic Matrix**
+  : Matrix representation of sets (columns ~ sets / e.g. documents, rows
+  ~ possible elements / e.g. shingles)
+
+- Calculate *Min-Hash*
+  - permute rows randomly 
+  - find first identifier with `1` (element)
+- Probability of two Min-Hashes of Documents to be the same *equals* the
+Jaccard Similarity
+- Proof
+  - 3 Types of rows: *X* if both `1`, *Y* if one `1`, *Z* if both `0`
+  - Most rows are of type *Z*
+  - ratio of type *X* to type *Y*
+  - *x*: amount of type *X* rows; *y*: amount of type *Y* rows
+  - Jaccard Similarity: `|S_1 \intersection S_2| / |S_1 \union S_2| =
+  x / x + y`
+  - Probability of *X* row appears before type *Y* row = `x / x + y`
+  - Becomes reasonable by repeating multiple times
+
+**Minhash Signature**
+  : vector of hash values for set `S: [h_1(S), ...
+  , h_n(S)]`
+
+**Minhash Matrix**
+  : matrix of minhash signatures as columns (smaller than characteristic
+  Matrix)
+
+**Simulated Minhash**
+  : compute minhash signatures by random hashes of row identifiers -->
+  new permutations
+
+## Locality-sensitive Hashing
+- Finding pairs "most similar"
+- hashing minhash signatures several times
+- **choose hashes that map minhash signatures to buckets**
+- for every signature hash bands consisting of `r` rows each
+- if two columns map to the same bucket for any band, *candidate pair*
+
+
+
