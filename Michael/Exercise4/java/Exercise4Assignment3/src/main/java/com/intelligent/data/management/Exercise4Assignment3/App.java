@@ -32,9 +32,6 @@ public class App
     	
     	// Choose two hash functions (similar to Figure 3.4) and compute the minhash signatures for the users
 		// (similar to Section 3.3.5).
-
-    	//HashMap<Long,Long> h1s = new HashMap<Long,Long>();
-    	//HashMap<Long,Long> h2s = new HashMap<Long,Long>();
     	
 		// initialize user minhash signatures with max values
 		HashMap<Long,Long> minh1s = new HashMap<Long,Long>();
@@ -88,10 +85,8 @@ public class App
         			System.out.print("|   0    ");
         		}
     		}
-    		//h1s.put(itemID, h1);
     		// Print the hash values
     		System.out.print(String.format("||   %d   ", h1));
-    		//h2s.put(itemID, h2);
     		System.out.print(String.format("|   %d   ", h2));
     		System.out.println();
     	}
@@ -148,7 +143,7 @@ public class App
         				sim++;
         			}
         			// Divide similarity count by 2 for two hash functions
-        			System.out.println(String.format("User %d, User %d = %.2f", u1, u2, sim/2.));
+        			System.out.println(String.format( "User %d, User %d = %.2f", u1, u2, sim/2. ));
         		}
     		}
     	}
