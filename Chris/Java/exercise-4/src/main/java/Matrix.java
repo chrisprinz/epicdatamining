@@ -1,34 +1,33 @@
-import java.util.Arrays;
 import java.util.LinkedList;
 
-class Matrix {
+class Matrix<T, E> {
 
-    private LinkedList<Long> columnIDs = new LinkedList<>();
-    private LinkedList<Long> rowIDs = new LinkedList<>();
+    private LinkedList<E> columnIDs = new LinkedList<>();
+    private LinkedList<T> rowIDs = new LinkedList<>();
     private long[][] values;
 
-    Matrix(LinkedList<Long> columnIDs, LinkedList<Long> rowIDs) {
+    Matrix(LinkedList<E> columnIDs, LinkedList<T> rowIDs) {
         this.columnIDs = columnIDs;
         this.rowIDs = rowIDs;
         values = new long[rowIDs.size()][columnIDs.size()];
     }
 
-    void addCharacteristic(Long columnID, Long rowID) {
+    void addCharacteristic(E columnID, T rowID) {
         int columnIndex = columnIDs.indexOf(columnID);
         int rowIndex = rowIDs.indexOf(rowID);
         values[rowIndex][columnIndex] = 1L;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("IDs\t");
         columnIDs.forEach(id -> builder.append(id).append("\t"));
         builder.append("\n");
         int row = 0;
-        for (Long id : rowIDs){
+        for (T id : rowIDs) {
             builder.append(id).append("\t");
-            for (int column = 0; column < columnIDs.size(); column++){
+            for (int column = 0; column < columnIDs.size(); column++) {
                 builder.append(values[row][column]).append("\t");
             }
             builder.append("\n");

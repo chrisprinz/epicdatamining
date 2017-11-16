@@ -13,7 +13,7 @@ public class App {
 
         try {
             DataModel data = getDataModelFromFile();
-            Matrix matrix = getUserItemCharacteristicMatrix(data);
+            Matrix<Long, Long> matrix = getUserItemCharacteristicMatrix(data);
             matrix = fillUserItemMatrix(data, matrix);
             System.out.print(matrix);
 
@@ -23,7 +23,8 @@ public class App {
 
     }
 
-    private static Matrix fillUserItemMatrix(DataModel data, Matrix matrix) throws TasteException {
+    private static Matrix<Long, Long> fillUserItemMatrix(DataModel data, Matrix<Long, Long> matrix)
+            throws TasteException {
         data.getUserIDs().forEachRemaining(user -> {
             try {
                 data.getItemIDsFromUser(user).forEach(item -> matrix.addCharacteristic(user, item));
@@ -34,14 +35,14 @@ public class App {
         return matrix;
     }
 
-    private static Matrix getUserItemCharacteristicMatrix(DataModel data) throws TasteException {
+    private static Matrix<Long, Long> getUserItemCharacteristicMatrix(DataModel data) throws TasteException {
         LinkedList<Long> userIDs = new LinkedList<>();
         data.getUserIDs().forEachRemaining(userIDs::add);
         userIDs.sort(Long::compareTo);
         LinkedList<Long> itemIDs = new LinkedList<>();
         data.getItemIDs().forEachRemaining(itemIDs::add);
         itemIDs.sort(Long::compareTo);
-        return new Matrix(userIDs, itemIDs);
+        return new Matrix<>(userIDs, itemIDs);
     }
 
     private static DataModel getDataModelFromFile() throws IOException {
