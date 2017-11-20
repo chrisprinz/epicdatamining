@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.LinkedList;
 
 class Matrix<T, E> {
@@ -10,6 +11,20 @@ class Matrix<T, E> {
         this.columnIDs = columnIDs;
         this.rowIDs = rowIDs;
         values = new long[rowIDs.size()][columnIDs.size()];
+    }
+
+    LinkedList<E> getColumnIDs() {
+        return columnIDs;
+    }
+
+    LinkedList<T> getRowIDs() {
+        return rowIDs;
+    }
+
+    void initializeWithInfinity(){
+        for (long[] row : values){
+            Arrays.fill(row, Long.MAX_VALUE);
+        }
     }
 
     void addCharacteristic(E columnID, T rowID) {
@@ -32,7 +47,8 @@ class Matrix<T, E> {
         for (T id : rowIDs) {
             builder.append(id).append("\t");
             for (int column = 0; column < columnIDs.size(); column++) {
-                builder.append(values[row][column]).append("\t");
+                String value = values[row][column]==Long.MAX_VALUE ? "inf" : Long.toString(values[row][column]);
+                builder.append(value).append("\t");
             }
             builder.append("\n");
             row++;

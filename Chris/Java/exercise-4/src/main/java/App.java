@@ -17,16 +17,31 @@ public class App {
             DataModel data = getDataModelFromFile();
             Matrix<Long, Long> matrix = getEmptyUserItemCharacteristicMatrix(data);
             matrix = fillUserItemMatrix(data, matrix);
+            System.out.println("User - Item - Matrix:");
             System.out.print(matrix);
-            System.out.print("\n\n");
+            System.out.print("______________________\n\n");
             Matrix<Long, String> hashMatrix = getHashItemMatrix(data);
+            System.out.println("Item - Hash - Matrix:");
             System.out.print(hashMatrix);
-            System.out.print("\n\n");
-
+            System.out.print("______________________\n\n");
+            Matrix<String, Long> hashSignatures = calculateSignatures(matrix, hashMatrix);
+            System.out.println("User - Hash - Matrix:");
+            System.out.print(hashSignatures);
         } catch (TasteException | IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private static Matrix<String, Long> calculateSignatures(Matrix<Long, Long> matrix,
+                                                            Matrix<Long, String> hashMatrix) {
+        LinkedList<Long> userIDs = matrix.getColumnIDs();
+        LinkedList<String> hashFunctions = hashMatrix.getColumnIDs();
+        Matrix<String,Long> signatureMatrix = new Matrix<>(userIDs, hashFunctions);
+        signatureMatrix.initializeWithInfinity();
+        // TODO reduce
+
+        return signatureMatrix;
     }
 
     private static Matrix<Long, Long> fillUserItemMatrix(DataModel data, Matrix<Long, Long> matrix)
