@@ -13,9 +13,13 @@ class Matrix<T, E> {
     }
 
     void addCharacteristic(E columnID, T rowID) {
+        addCharacteristic(columnID, rowID, 1L);
+    }
+
+    void addCharacteristic(E columnID, T rowID, long value) {
         int columnIndex = columnIDs.indexOf(columnID);
         int rowIndex = rowIDs.indexOf(rowID);
-        values[rowIndex][columnIndex] = 1L;
+        values[rowIndex][columnIndex] = value;
     }
 
     @Override
