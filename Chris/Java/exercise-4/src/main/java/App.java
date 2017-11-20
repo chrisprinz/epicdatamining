@@ -27,10 +27,34 @@ public class App {
             Matrix<String, Long> signatureMatrix = calculateSignatureMatrix(matrix, hashMatrix);
             System.out.println("Signature - Matrix:");
             System.out.print(signatureMatrix);
+            System.out.print("______________________\n\n");
+            printPairwiseSimilarities(signatureMatrix);
         } catch (TasteException | IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private static void printPairwiseSimilarities(Matrix<String, Long> signatureMatrix) {
+        System.out.print("Pairwise similarities between users: \n");
+        LinkedList<Long> userIDs = signatureMatrix.getColumnIDs();
+        for (int i = 0; i < userIDs.size(); i++) {
+            for (int j = i + 1; j < userIDs.size(); j++) {
+                int intersection = 0;
+                int union = 0;
+                Long user = userIDs.get(i);
+                Long other = userIDs.get(j);
+                for (String hashFunction : signatureMatrix.getRowIDs()) {
+                    if (signatureMatrix.get(user, hashFunction) == signatureMatrix.get(other, hashFunction)) {
+                        intersection++;
+                    }
+                    union++;
+                }
+                System.out.print(
+                        "sim(" + user + ", " + other + ") ~ " + Float.toString((float) intersection / (float) union) +
+                                "\n");
+            }
+        }
     }
 
     private static Matrix<String, Long> calculateSignatureMatrix(Matrix<Long, Long> matrix,
@@ -38,15 +62,15 @@ public class App {
         LinkedList<Long> userIDs = matrix.getColumnIDs();
         LinkedList<Long> itemIDs = matrix.getRowIDs();
         LinkedList<String> hashFunctions = hashMatrix.getColumnIDs();
-        Matrix<String,Long> signatureMatrix = new Matrix<>(userIDs, hashFunctions);
+        Matrix<String, Long> signatureMatrix = new Matrix<>(userIDs, hashFunctions);
         signatureMatrix.initializeWithInfinity();
-        for(Long itemID : itemIDs){
-            for (Long userID: userIDs){
-                if (matrix.get(userID, itemID) > 0){
-                    for (String hashFunction : hashFunctions){
-                        long oldValue = signatureMatrix.get(userID,hashFunction);
-                        long value = hashMatrix.get(hashFunction,itemID);
-                        if (value < oldValue){
+        for (Long itemID : itemIDs) {
+            for (Long userID : userIDs) {
+                if (matrix.get(userID, itemID) > 0) {
+                    for (String hashFunction : hashFunctions) {
+                        long oldValue = signatureMatrix.get(userID, hashFunction);
+                        long value = hashMatrix.get(hashFunction, itemID);
+                        if (value < oldValue) {
                             signatureMatrix.addCharacteristic(userID, hashFunction, value);
                         }
                     }
