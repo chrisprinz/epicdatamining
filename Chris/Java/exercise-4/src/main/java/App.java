@@ -8,6 +8,8 @@ import java.util.LinkedList;
 
 public class App {
 
+    private static int numberOfElements = 0;
+
 
     public static void main(String[] args) {
 
@@ -16,7 +18,10 @@ public class App {
             Matrix<Long, Long> matrix = getEmptyUserItemCharacteristicMatrix(data);
             matrix = fillUserItemMatrix(data, matrix);
             System.out.print(matrix);
+            System.out.print("\n\n");
             Matrix<Long, String> hashMatrix = getHashItemMatrix(data);
+            System.out.print(hashMatrix);
+            System.out.print("\n\n");
 
         } catch (TasteException | IOException e) {
             e.printStackTrace();
@@ -45,19 +50,20 @@ public class App {
         hashFunctions.add("h_1");
         hashFunctions.add("h_2");
         Matrix<Long, String> matrix = new Matrix<>(hashFunctions, itemIDs);
-        for (Long itemID: itemIDs){
-            matrix.addCharacteristic("h_1", hashOne(itemID));
-            matrix.addCharacteristic("h_2", hashTwo(itemID));
+        for (Long itemID : itemIDs) {
+            matrix.addCharacteristic("h_1", itemID, hashOne(itemID));
+            matrix.addCharacteristic("h_2", itemID, hashTwo(itemID));
         }
         return matrix;
     }
 
     private static Long hashOne(Long value) {
-        return null;
+        return (value + 1) % numberOfElements;
     }
 
     private static Long hashTwo(Long value) {
-        return null;
+
+        return (value * 7 + 1) % numberOfElements;
     }
 
     private static Matrix<Long, Long> getEmptyUserItemCharacteristicMatrix(DataModel data) throws TasteException {
@@ -67,6 +73,7 @@ public class App {
         LinkedList<Long> itemIDs = new LinkedList<>();
         data.getItemIDs().forEachRemaining(itemIDs::add);
         itemIDs.sort(Long::compareTo);
+        numberOfElements = itemIDs.size();
         return new Matrix<>(userIDs, itemIDs);
     }
 
