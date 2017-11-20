@@ -37,6 +37,12 @@ class Matrix<T, E> {
         values[rowIndex][columnIndex] = value;
     }
 
+    long get(E columnID, T rowID) {
+        int columnIndex = columnIDs.indexOf(columnID);
+        int rowIndex = rowIDs.indexOf(rowID);
+        return values[rowIndex][columnIndex];
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

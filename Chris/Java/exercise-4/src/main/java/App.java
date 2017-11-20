@@ -24,22 +24,35 @@ public class App {
             System.out.println("Item - Hash - Matrix:");
             System.out.print(hashMatrix);
             System.out.print("______________________\n\n");
-            Matrix<String, Long> hashSignatures = calculateSignatures(matrix, hashMatrix);
-            System.out.println("User - Hash - Matrix:");
-            System.out.print(hashSignatures);
+            Matrix<String, Long> signatureMatrix = calculateSignatureMatrix(matrix, hashMatrix);
+            System.out.println("Signature - Matrix:");
+            System.out.print(signatureMatrix);
         } catch (TasteException | IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    private static Matrix<String, Long> calculateSignatures(Matrix<Long, Long> matrix,
-                                                            Matrix<Long, String> hashMatrix) {
+    private static Matrix<String, Long> calculateSignatureMatrix(Matrix<Long, Long> matrix,
+                                                                 Matrix<Long, String> hashMatrix) {
         LinkedList<Long> userIDs = matrix.getColumnIDs();
+        LinkedList<Long> itemIDs = matrix.getRowIDs();
         LinkedList<String> hashFunctions = hashMatrix.getColumnIDs();
         Matrix<String,Long> signatureMatrix = new Matrix<>(userIDs, hashFunctions);
         signatureMatrix.initializeWithInfinity();
-        // TODO reduce
+        for(Long itemID : itemIDs){
+            for (Long userID: userIDs){
+                if (matrix.get(userID, itemID) > 0){
+                    for (String hashFunction : hashFunctions){
+                        long oldValue = signatureMatrix.get(userID,hashFunction);
+                        long value = hashMatrix.get(hashFunction,itemID);
+                        if (value < oldValue){
+                            signatureMatrix.addCharacteristic(userID, hashFunction, value);
+                        }
+                    }
+                }
+            }
+        }
 
         return signatureMatrix;
     }
