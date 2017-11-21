@@ -171,4 +171,52 @@ Jaccard Similarity
 - if two columns map to the same bucket for any band, *candidate pair*
 
 
+**Todo** look at first three slides of lecture 2017-11-21
+
+## Distance Measures
+- Jaccard similarity `0..1` --> Jaccard distance `0..1`, = 1 - Jaccard
+similarity
+- Defined as a set of points (*space*), with e.g. points `x` and `y`
+- function
+- Distance axioms
+  - `d(x,y) >= 0` (non-negativity)
+  - `d(x,y) = 0 <--> x = y` (identity)
+  - `d(x,y) = d(y,x)` (symmetry)
+  - `d(x,y) <= d(x,z) + d(z,y)` (triangle-inequality)
+
+**Todo** Details on different Distance measures from book
+
+## Theory of Locality - sensitive functions
+- function families like Jaccard Similarity have following properties:
+  - close pairs more likely than distant pairs
+  - statistically independent
+  - efficient (better than manual checking)
+- locality sensitive function: `f(x) = f(y) <--> make x,y a candidate
+pair`
+- sensitive if for any function in function family
+  - `d(x,y) <= d_1 --> p(f(x)=f(y)) >= p_1`
+  - `d(x,y) >= d_2 --> p(f(x)=f(y)) >= p_2`
+- combine multiple functions within family to *tune* S-curve
+- is sensitive if `p_1 := 1 - d_1 && p_2 := 1 - d_2`
+
+### Amplification of locality-sensitive families
+- given a sensitive family `F`, form new `F'` by the **AND**-construct
+so that for any function in `F'` such that it gives an equal result for
+`x, y` if and only if for any function in `F`, this is also the case
+  - `p_1 := p_1^r`, where `r` is the number of rows in banding technique
+  - similar with `p_2`
+- same with **OR**-construct if at least one function in `F` gives the
+same value
+  - `1 - (1 - p_1)^b`, where `b` is the number of functions in `F`
+- if cascading **AND** with **OR** for `r = b = 4`, false positives and
+false negatives are reduced
+- if cascading **OR** with **AND** for `r = b = 4`, false positives
+increase
+
+## LSH families for other distance measures
+
+### Hamming Distance
+- defined as number of component-wise-differences
+- Family of functions is defined as creating one function for each
+component and `f_i(x) = f_i(y)` iff `x,y` agree in component `i`
 
