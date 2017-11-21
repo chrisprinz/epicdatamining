@@ -4,7 +4,7 @@ import numpy
 def calculate_s_curve(r,b, s):
     return 1-((1-s**r)**b)
 
-x = numpy.linspace(-0.5,0.5,10000)
+x = numpy.linspace(0,1,10000)
 y_1 = calculate_s_curve(3, 10, x)
 y_2 = calculate_s_curve(6, 20, x)
 y_3 = calculate_s_curve(5, 50, x)
