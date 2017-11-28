@@ -220,3 +220,83 @@ increase
 - Family of functions is defined as creating one function for each
 component and `f_i(x) = f_i(y)` iff `x,y` agree in component `i`
 
+***
+
+# Clustering
+Input:
+  Collection of Points
+Goal:
+  Group them based on some measure (i.e. distance)
+
+## General Considerations
+
+### Strategies
+- Hierarchical
+  - agglomerative (bottom-up)
+  - divisive (top-down)
+- Assignment
+  - TODO
+- Other distinctions
+  - Euclidean --> Centroid
+  - Non-Euclidean --> Clustroid
+- Size
+  - Main memory only
+  - Secondary memory necessary
+
+### Curse of Dimensionality
+1. All points have "equal" distance (e.g. euclidean)
+2. almost all vectors are orthogonal (e.g. cosine)
+
+==> Difficult to apply conventional distance measures
+==> Solution: Dimensionality reduction
+
+#### 1.
+- `d` dimensions
+- `n` random points in unit cube
+- `x = [x_1, ... , x_n]`
+- `x_i = [0, ... , 1]`
+- for two random points `x, y`, consider L-2 norm
+  - for large `d` probability of `|x_1 - y_1|` close to 1 is high
+  - ==> relative contrast vanishes:
+  - `(D_max - D_min) / D_min` --> 0
+
+#### 2
+- consider angle between vectors
+- `B`is origin
+- for two random points `B, C`, consider Cosine norm
+  - `BA` and `BC` are vectors
+  - numerator is sum or random values --> 0
+  - denominator grows linearly with number of dimensions
+  - ==> cosine for arbitrary vectors --> 0 --> ~ 90°
+
+## Hierarchical Clustering
+1. 1 point = 1 cluster
+2. merge combine clusters
+
+### Procedure
+1. Find 2 closest points (or if multiple candidates, an arbitrary pair)
+2. Replace 2 points from 1. by cluster with centroid (point at center of
+cluster
+3. Find 2 closest points (or one point and cluster (consider centroid)
+4. Replace old centroids by new ones as average of all points in cluster
+5. Repeat until
+    - fixed amount of clusters reached
+    - adequacy of clusters is reached (e.g. threshold for distances
+    inside clusters)
+
+### Control Rules for Merging Clusters
+- smallest distance between centroids
+- cluster distance := average point-wise distance
+- cluster distance := minimum point-wise distance
+- radius := maximum distance between cluster's points and centroid-->
+merge 2 clusters with lowest radius
+- diameter := maximum distance between cluster's points
+
+### Non-Euclidean Space (no centroid as average)
+- choose one point of cluster as representative (=: clusteroid)
+  - minimize sum of distances to other cluster points
+  - minimize the maximum distance to other cluster points
+  - minimize the squared distance to other cluster points
+
+
+
