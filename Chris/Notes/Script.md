@@ -270,8 +270,8 @@ Goal:
   - ==> cosine for arbitrary vectors --> 0 --> ~ 90°
 
 ## Hierarchical Clustering
-1. 1 point = 1 cluster
-2. merge combine clusters
+- 1 point = 1 cluster
+- merge combine clusters
 
 ### Procedure
 1. Find 2 closest points (or if multiple candidates, an arbitrary pair)
@@ -298,5 +298,100 @@ merge 2 clusters with lowest radius
   - minimize the maximum distance to other cluster points
   - minimize the squared distance to other cluster points
 
+## k-means Clustering
+- point assignment for euclidean space
+- `k` is known
 
+### procedure
+- choose `k` initial points as centroids
+- assign each point to the closest of these centroids
+- shift centroids to new center of cluster
 
+### Choosing the right k
+- trade off between average diameter and number of clusters
+
+### BFR Algorithm
+- prerequisites
+  - data does not fit into memory
+- choose `k` points
+- partition data into chunks that fit
+- in main memory
+  1. discard set --> summaries of clusters
+  2. compressed set --> summaries of points not close to cluster
+  centroid but close to each other
+  3. retained set --> neither close to cluster nor to other points
+- summary of a set defined as count `N` of points, centroid's
+coordinates `SUM` and a variance `SUMSQ`
+- closeness:
+  - assume random order of points in all chunks
+    - assign <--> unlikely that there will be a better (closer) fit
+  - Mahalanobis distance
+    - euclidean space
+    - axes of clusters align with axes of space
+    - euclidean distance between point `p` and centroid `c` by standard
+    deviation of all points within cluster
+    - in BFR compute between each point `p` and each centroid `c`
+      - if < threshold, add to closest cluster, else resume with mini-
+      clusters
+
+#### Process
+For each chunk:
+1. if point close to centroid
+  - add point to cluster
+  - update `N`, `SUM`, `SUMSQ`
+2. else cluster with retained set (outliers) and form miniclusters via
+other cluster algorithm
+3. add minicluster's summaries to compressed set
+4. actual point assignment for discard / compressed set stored in
+secondary memory
+
+After last chunk:
+- merge retained / compressed set with closest cluster or treat as
+outliers
+
+## CURE Algorithm
+- point assignment for euclidean space
+- clusters don't have to be aligned with space
+
+### Process
+1. Initialize
+  - cluster small sample of data in main memory
+  - select representatives for each cluster (e.g. far away points inside)
+  - move representatives slightly towards centroid
+2. Completion
+  - merge clusters if pair of representatives from both clusters are
+  close
+  - read all points from secondary memory and assign to closest cluster
+  via representative
+
+## GRGPF Algorithm
+- represent clusters by sample points in main memory
+- organize clusters in tree
+- point assignment via passing it down the tree
+- the further we go up in the tree, the less information we have as
+parent is only a subset of union of children
+- `ROWSUM(p)` sum of squares of distances from `p` to other points in
+  cluster
+- clusteroid defined as point that minimizes `ROWSUM(p)`
+
+### Process
+- Initialize
+  - cluster sample data in main memory hierarchically with desired
+  cluster size `n`
+  - select from `T` clusters with approx. size `n` --> leaves
+  - zusammenfassen of clusters with common ancestors
+- Add points
+  - read points from secondary memory
+  - insert into nearest cluster
+    - start at root
+    - choose child that has closest centroid
+    - continue until leave
+    - adjust representation of cluster after adding new point
+      - update `N`
+      - update `ROWSUM(q)`, if `q` is one of the closest or furthest
+      points
+      - if `p` is one of the closest or furthers, estimate `ROWSUM(p)`
+      as `ROWSUM(c) + N * (d(p,c))^2`, because calculation is impossible
+      since all points of cluster would be required but are discarded,
+      due to space efficiency
+- merge and split clusters, adjust
