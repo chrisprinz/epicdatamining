@@ -171,4 +171,227 @@ Jaccard Similarity
 - if two columns map to the same bucket for any band, *candidate pair*
 
 
+**Todo** look at first three slides of lecture 2017-11-21
 
+## Distance Measures
+- Jaccard similarity `0..1` --> Jaccard distance `0..1`, = 1 - Jaccard
+similarity
+- Defined as a set of points (*space*), with e.g. points `x` and `y`
+- function
+- Distance axioms
+  - `d(x,y) >= 0` (non-negativity)
+  - `d(x,y) = 0 <--> x = y` (identity)
+  - `d(x,y) = d(y,x)` (symmetry)
+  - `d(x,y) <= d(x,z) + d(z,y)` (triangle-inequality)
+
+**Todo** Details on different Distance measures from book
+
+## Theory of Locality - sensitive functions
+- function families like Jaccard Similarity have following properties:
+  - close pairs more likely than distant pairs
+  - statistically independent
+  - efficient (better than manual checking)
+- locality sensitive function: `f(x) = f(y) <--> make x,y a candidate
+pair`
+- sensitive if for any function in function family
+  - `d(x,y) <= d_1 --> p(f(x)=f(y)) >= p_1`
+  - `d(x,y) >= d_2 --> p(f(x)=f(y)) >= p_2`
+- combine multiple functions within family to *tune* S-curve
+- is sensitive if `p_1 := 1 - d_1 && p_2 := 1 - d_2`
+
+### Amplification of locality-sensitive families
+- given a sensitive family `F`, form new `F'` by the **AND**-construct
+so that for any function in `F'` such that it gives an equal result for
+`x, y` if and only if for any function in `F`, this is also the case
+  - `p_1 := p_1^r`, where `r` is the number of rows in banding technique
+  - similar with `p_2`
+- same with **OR**-construct if at least one function in `F` gives the
+same value
+  - `1 - (1 - p_1)^b`, where `b` is the number of functions in `F`
+- if cascading **AND** with **OR** for `r = b = 4`, false positives and
+false negatives are reduced
+- if cascading **OR** with **AND** for `r = b = 4`, false positives
+increase
+
+## LSH families for other distance measures
+
+### Hamming Distance
+- defined as number of component-wise-differences
+- Family of functions is defined as creating one function for each
+component and `f_i(x) = f_i(y)` iff `x,y` agree in component `i`
+
+***
+
+# Clustering
+Input:
+  Collection of Points
+Goal:
+  Group them based on some measure (i.e. distance)
+
+## General Considerations
+
+### Strategies
+- Hierarchical
+  - agglomerative (bottom-up)
+  - divisive (top-down)
+- Assignment
+  - TODO
+- Other distinctions
+  - Euclidean --> Centroid
+  - Non-Euclidean --> Clustroid
+- Size
+  - Main memory only
+  - Secondary memory necessary
+
+### Curse of Dimensionality
+1. All points have "equal" distance (e.g. euclidean)
+2. almost all vectors are orthogonal (e.g. cosine)
+
+==> Difficult to apply conventional distance measures
+==> Solution: Dimensionality reduction
+
+#### 1.
+- `d` dimensions
+- `n` random points in unit cube
+- `x = [x_1, ... , x_n]`
+- `x_i = [0, ... , 1]`
+- for two random points `x, y`, consider L-2 norm
+  - for large `d` probability of `|x_1 - y_1|` close to 1 is high
+  - ==> relative contrast vanishes:
+  - `(D_max - D_min) / D_min` --> 0
+
+#### 2
+- consider angle between vectors
+- `B`is origin
+- for two random points `B, C`, consider Cosine norm
+  - `BA` and `BC` are vectors
+  - numerator is sum or random values --> 0
+  - denominator grows linearly with number of dimensions
+  - ==> cosine for arbitrary vectors --> 0 --> ~ 90°
+
+## Hierarchical Clustering
+- 1 point = 1 cluster
+- merge combine clusters
+
+### Procedure
+1. Find 2 closest points (or if multiple candidates, an arbitrary pair)
+2. Replace 2 points from 1. by cluster with centroid (point at center of
+cluster
+3. Find 2 closest points (or one point and cluster (consider centroid)
+4. Replace old centroids by new ones as average of all points in cluster
+5. Repeat until
+    - fixed amount of clusters reached
+    - adequacy of clusters is reached (e.g. threshold for distances
+    inside clusters)
+
+### Control Rules for Merging Clusters
+- smallest distance between centroids
+- cluster distance := average point-wise distance
+- cluster distance := minimum point-wise distance
+- radius := maximum distance between cluster's points and centroid-->
+merge 2 clusters with lowest radius
+- diameter := maximum distance between cluster's points
+
+### Non-Euclidean Space (no centroid as average)
+- choose one point of cluster as representative (=: clusteroid)
+  - minimize sum of distances to other cluster points
+  - minimize the maximum distance to other cluster points
+  - minimize the squared distance to other cluster points
+
+## k-means Clustering
+- point assignment for euclidean space
+- `k` is known
+
+### procedure
+- choose `k` initial points as centroids
+- assign each point to the closest of these centroids
+- shift centroids to new center of cluster
+
+### Choosing the right k
+- trade off between average diameter and number of clusters
+
+### BFR Algorithm
+- prerequisites
+  - data does not fit into memory
+- choose `k` points
+- partition data into chunks that fit
+- in main memory
+  1. discard set --> summaries of clusters
+  2. compressed set --> summaries of points not close to cluster
+  centroid but close to each other
+  3. retained set --> neither close to cluster nor to other points
+- summary of a set defined as count `N` of points, centroid's
+coordinates `SUM` and a variance `SUMSQ`
+- closeness:
+  - assume random order of points in all chunks
+    - assign <--> unlikely that there will be a better (closer) fit
+  - Mahalanobis distance
+    - euclidean space
+    - axes of clusters align with axes of space
+    - euclidean distance between point `p` and centroid `c` by standard
+    deviation of all points within cluster
+    - in BFR compute between each point `p` and each centroid `c`
+      - if < threshold, add to closest cluster, else resume with mini-
+      clusters
+
+#### Process
+For each chunk:
+1. if point close to centroid
+  - add point to cluster
+  - update `N`, `SUM`, `SUMSQ`
+2. else cluster with retained set (outliers) and form miniclusters via
+other cluster algorithm
+3. add minicluster's summaries to compressed set
+4. actual point assignment for discard / compressed set stored in
+secondary memory
+
+After last chunk:
+- merge retained / compressed set with closest cluster or treat as
+outliers
+
+## CURE Algorithm
+- point assignment for euclidean space
+- clusters don't have to be aligned with space
+
+### Process
+1. Initialize
+  - cluster small sample of data in main memory
+  - select representatives for each cluster (e.g. far away points inside)
+  - move representatives slightly towards centroid
+2. Completion
+  - merge clusters if pair of representatives from both clusters are
+  close
+  - read all points from secondary memory and assign to closest cluster
+  via representative
+
+## GRGPF Algorithm
+- represent clusters by sample points in main memory
+- organize clusters in tree
+- point assignment via passing it down the tree
+- the further we go up in the tree, the less information we have as
+parent is only a subset of union of children
+- `ROWSUM(p)` sum of squares of distances from `p` to other points in
+  cluster
+- clusteroid defined as point that minimizes `ROWSUM(p)`
+
+### Process
+- Initialize
+  - cluster sample data in main memory hierarchically with desired
+  cluster size `n`
+  - select from `T` clusters with approx. size `n` --> leaves
+  - zusammenfassen of clusters with common ancestors
+- Add points
+  - read points from secondary memory
+  - insert into nearest cluster
+    - start at root
+    - choose child that has closest centroid
+    - continue until leave
+    - adjust representation of cluster after adding new point
+      - update `N`
+      - update `ROWSUM(q)`, if `q` is one of the closest or furthest
+      points
+      - if `p` is one of the closest or furthers, estimate `ROWSUM(p)`
+      as `ROWSUM(c) + N * (d(p,c))^2`, because calculation is impossible
+      since all points of cluster would be required but are discarded,
+      due to space efficiency
+- merge and split clusters, adjust
