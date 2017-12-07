@@ -33,6 +33,8 @@
 
 \subsection*{Assignment 1}
 
+a) Minhash Signature:\\
+
 \begin{tabular}{c|c|c|c|c||c|c|c}
 	Element & $S_1$ & $S_2$ & $S_3$  & $S_4$ & $h_1$ & $h_2$ & $h_3$  \\ 
 	\hline\hline
@@ -47,7 +49,12 @@
 	4 & 0 & 0 & 1 & 1 & 3 & 2 & 4 \\ 
 	\hline 
 	5 & 1 & 0 & 0 & 0 & 5 & 5 & 3 \\ 
-\end{tabular} 
+\end{tabular}
+
+
+\vspace{1cm}
+
+b) Only $h_3$ provides a sufficient hash-function because it offers different hashed for every element. 
 
 \vspace{1cm}
 
@@ -107,7 +114,7 @@ Minhash-Signature Step 5:\\
 \begin{tabular}{c||c|c|c|c}
 	& $S_1$ & $S_2$ & $S_3$ &$S_4$  \\ 
 	\hline \hline
-	$h_1$	&  5 & 1 & 3 & 1 \\ 
+	$h_1$	&  5 & 1 & 1 & 1 \\ 
 	\hline 
 	$h_2$	&  2 & 2 & 2 & 2 \\ 
 	\hline 
@@ -120,7 +127,7 @@ Final Minhash-Signature (After Step 6):\\
 \begin{tabular}{c||c|c|c|c}
 	& $S_1$ & $S_2$ & $S_3$ &$S_4$  \\ 
 	\hline \hline
-	$h_1$	&  5 & 1 & 3 & 1 \\ 
+	$h_1$	&  5 & 1 & 1 & 1 \\ 
 	\hline 
 	$h_2$	&  2 & 2 & 2 & 2 \\ 
 	\hline 
@@ -158,7 +165,7 @@ Plots for s-curve:
 \end{figure}
 
 \vspace{5cm}
-s that fulfils $1-1(1-s^r)^b = \frac{1}{2}$:\\
+s that fulfils $1-(1-s^r)^b = \frac{1}{2}$:\\
 
 a) $ s_1 = \sqrt[3]{1-\frac{1}{\sqrt[10]{2}}} \approx 0.406 $\\
 $ s_2 = \sqrt[3]{1+\frac{1}{\sqrt[10]{2}}} \approx 1.246 $\\
