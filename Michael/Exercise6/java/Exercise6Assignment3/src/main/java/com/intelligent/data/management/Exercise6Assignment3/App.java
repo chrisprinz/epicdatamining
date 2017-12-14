@@ -5,6 +5,7 @@
 package com.intelligent.data.management.Exercise6Assignment3;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -12,6 +13,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.mahout.clustering.canopy.CanopyDriver;
 import org.apache.mahout.clustering.fuzzykmeans.FuzzyKMeansDriver;
 import org.apache.mahout.common.Pair;
@@ -19,6 +21,8 @@ import org.apache.mahout.common.distance.EuclideanDistanceMeasure;
 import org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable;
 import org.apache.mahout.vectorizer.DictionaryVectorizer;
 import org.apache.mahout.vectorizer.DocumentProcessor;
+import org.apache.mahout.vectorizer.common.PartialVectorMerger;
+import org.apache.mahout.vectorizer.tfidf.TFIDFConverter;
 
 public class App 
 {
@@ -27,6 +31,7 @@ public class App
     static FileSystem fileSystem;
     static Path documentsSequencePath;
     static Path tokenizedDocumentsPath;
+    static Path tfidfPath;
     static Path termFrequencyVectorsPath;
     static final String[] FILENAMES = {"book_example_data.txt", "iris_data.txt"};
  
@@ -38,12 +43,12 @@ public class App
         for (String filename : FILENAMES) {
             outputFolder = "output/" + filename + "/";
             documentsSequencePath = new Path(outputFolder, "sequence");
-            tokenizedDocumentsPath = new Path(outputFolder,
-                    DocumentProcessor.TOKENIZED_DOCUMENT_OUTPUT_FOLDER);
-            termFrequencyVectorsPath = new Path(outputFolder
-                    + DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER);
+            tokenizedDocumentsPath = new Path(outputFolder, DocumentProcessor.TOKENIZED_DOCUMENT_OUTPUT_FOLDER);
+            tfidfPath = new Path(outputFolder + "tfidf");
+            termFrequencyVectorsPath = new Path(outputFolder + DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER);
 
             readFile();
+            calculateTfIdf();
 	        clusterFile();
 	 
 	        printSequenceFile(documentsSequencePath);
@@ -54,8 +59,7 @@ public class App
     }
   
     public static void readFile() throws IOException {
-        SequenceFile.Writer writer = new SequenceFile.Writer(fileSystem, configuration,
-        		documentsSequencePath, Text.class, Text.class);
+        SequenceFile.Writer writer = new SequenceFile.Writer(fileSystem, configuration, documentsSequencePath, Text.class, Text.class);
  
         Text id1 = new Text("Document 1");
         Text text1 = new Text("John saw a red car.");
@@ -99,6 +103,25 @@ public class App
  
         writer.close();
     }
+    
+    static public void calculateTfIdf() throws ClassNotFoundException, IOException, InterruptedException {
+		DocumentProcessor.tokenizeDocuments(documentsSequencePath,
+		        StandardAnalyzer.class, tokenizedDocumentsPath, configuration);
+		
+		DictionaryVectorizer.createTermFrequencyVectors(tokenizedDocumentsPath,
+		        new Path(outputFolder),
+		        DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER,
+		        configuration, 1, 1, 0.0f, PartialVectorMerger.NO_NORMALIZING,
+		        true, 1, 100, false, false);
+		
+		Pair<Long[], List<Path>> documentFrequencies = TFIDFConverter
+		        .calculateDF(termFrequencyVectorsPath, tfidfPath,
+		                configuration, 100);
+		
+		TFIDFConverter.processTfIdf(termFrequencyVectorsPath, tfidfPath,
+		        configuration, documentFrequencies, 1, 100,
+		        PartialVectorMerger.NO_NORMALIZING, false, false, false, 1);
+	}
  
     static void clusterFile() throws ClassNotFoundException, IOException, InterruptedException {
         String vectorsFolder = outputFolder + "tfidf/tfidf-vectors/";
@@ -121,11 +144,9 @@ public class App
     }
  
     static void printSequenceFile(Path path) {
-        SequenceFileIterable<Writable, Writable> iterable = new SequenceFileIterable<Writable, Writable>(
-                path, configuration);
+        SequenceFileIterable<Writable, Writable> iterable = new SequenceFileIterable<Writable, Writable>(path, configuration);
         for (Pair<Writable, Writable> pair : iterable) {
-            System.out
-                    .format("%10s -> %s\n", pair.getFirst(), pair.getSecond());
+            System.out.format("%10s -> %s\n", pair.getFirst(), pair.getSecond());
         }
     }
 
