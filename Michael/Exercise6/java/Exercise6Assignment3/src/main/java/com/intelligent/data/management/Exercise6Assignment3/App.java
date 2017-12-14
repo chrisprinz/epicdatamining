@@ -4,8 +4,10 @@
 
 package com.intelligent.data.management.Exercise6Assignment3;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -13,118 +15,67 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.mahout.clustering.canopy.CanopyDriver;
 import org.apache.mahout.clustering.fuzzykmeans.FuzzyKMeansDriver;
 import org.apache.mahout.common.Pair;
 import org.apache.mahout.common.distance.EuclideanDistanceMeasure;
+import org.apache.mahout.common.distance.ManhattanDistanceMeasure;
 import org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable;
-import org.apache.mahout.vectorizer.DictionaryVectorizer;
+import org.apache.mahout.math.DenseVector;
+import org.apache.mahout.math.VectorWritable;
 import org.apache.mahout.vectorizer.DocumentProcessor;
-import org.apache.mahout.vectorizer.common.PartialVectorMerger;
-import org.apache.mahout.vectorizer.tfidf.TFIDFConverter;
 
 public class App 
 {
+	static String dataFolder;
     static String outputFolder;
     static Configuration configuration;
     static FileSystem fileSystem;
     static Path documentsSequencePath;
     static Path tokenizedDocumentsPath;
     static Path tfidfPath;
-    static Path termFrequencyVectorsPath;
+    static Path vectorsPath;
     static final String[] FILENAMES = {"book_example_data.txt", "iris_data.txt"};
  
     public static void main(String args[]) throws Exception {
         configuration = new Configuration();
         fileSystem = FileSystem.get(configuration);
  
-
+        dataFolder = "data/";
         for (String filename : FILENAMES) {
             outputFolder = "output/" + filename + "/";
             documentsSequencePath = new Path(outputFolder, "sequence");
             tokenizedDocumentsPath = new Path(outputFolder, DocumentProcessor.TOKENIZED_DOCUMENT_OUTPUT_FOLDER);
             tfidfPath = new Path(outputFolder + "tfidf");
-            termFrequencyVectorsPath = new Path(outputFolder + DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER);
+            vectorsPath = new Path(outputFolder + "vectors");
 
-            readFile();
-            calculateTfIdf();
-	        clusterFile();
-	 
-	        printSequenceFile(documentsSequencePath);
- 
+            readFile(filename);
+	        clusterFile(); 
 	        System.out.println("\n Clusters: ");
 	        printSequenceFile(new Path(outputFolder + "/clusters/clusteredPoints/part-m-00000"));
         }
     }
   
-    public static void readFile() throws IOException {
-        SequenceFile.Writer writer = new SequenceFile.Writer(fileSystem, configuration, documentsSequencePath, Text.class, Text.class);
- 
-        Text id1 = new Text("Document 1");
-        Text text1 = new Text("John saw a red car.");
-        writer.append(id1, text1);
- 
-        Text id2 = new Text("Document 2");
-        Text text2 = new Text("Marta found a red bike.");
-        writer.append(id2, text2);
- 
-        Text id3 = new Text("Document 3");
-        Text text3 = new Text("Don need a blue coat.");
-        writer.append(id3, text3);
- 
-        Text id4 = new Text("Document 4");
-        Text text4 = new Text("Mike bought a blue boat.");
-        writer.append(id4, text4);
- 
-        Text id5 = new Text("Document 5");
-        Text text5 = new Text("Albert wants a blue dish.");
-        writer.append(id5, text5);
- 
-        Text id6 = new Text("Document 6");
-        Text text6 = new Text("Lara likes blue glasses.");
-        writer.append(id6, text6);
- 
-        Text id7 = new Text("Document 7");
-        Text text7 = new Text("Donna, do you have red apples?");
-        writer.append(id7, text7);
- 
-        Text id8 = new Text("Document 8");
-        Text text8 = new Text("Sonia needs blue books.");
-        writer.append(id8, text8);
- 
-        Text id9 = new Text("Document 9");
-        Text text9 = new Text("I like blue eyes.");
-        writer.append(id9, text9);
- 
-        Text id10 = new Text("Document 10");
-        Text text10 = new Text("Arleen has a red carpet.");
-        writer.append(id10, text10);
- 
+    public static void readFile(String filename) throws IOException {
+        SequenceFile.Writer writer = new SequenceFile.Writer(fileSystem, configuration, vectorsPath, Text.class, VectorWritable.class);
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(new File (dataFolder + filename)));
+
+		String line;
+		int id = 0;
+		while ((line = bufferedReader.readLine()) != null) {
+			String[] els = line.split(",");
+			double[] vals = new double[els.length];
+			for (int i=0; i<els.length; i++) {
+				vals[i] = Double.parseDouble(els[i]);
+			}
+			DenseVector V = new DenseVector(vals);
+			writer.append(new Text(Integer.toString(id++)), new VectorWritable(V));
+		}
+		bufferedReader.close();
         writer.close();
     }
-    
-    static public void calculateTfIdf() throws ClassNotFoundException, IOException, InterruptedException {
-		DocumentProcessor.tokenizeDocuments(documentsSequencePath,
-		        StandardAnalyzer.class, tokenizedDocumentsPath, configuration);
-		
-		DictionaryVectorizer.createTermFrequencyVectors(tokenizedDocumentsPath,
-		        new Path(outputFolder),
-		        DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER,
-		        configuration, 1, 1, 0.0f, PartialVectorMerger.NO_NORMALIZING,
-		        true, 1, 100, false, false);
-		
-		Pair<Long[], List<Path>> documentFrequencies = TFIDFConverter
-		        .calculateDF(termFrequencyVectorsPath, tfidfPath,
-		                configuration, 100);
-		
-		TFIDFConverter.processTfIdf(termFrequencyVectorsPath, tfidfPath,
-		        configuration, documentFrequencies, 1, 100,
-		        PartialVectorMerger.NO_NORMALIZING, false, false, false, 1);
-	}
  
     static void clusterFile() throws ClassNotFoundException, IOException, InterruptedException {
-        String vectorsFolder = outputFolder + "tfidf/tfidf-vectors/";
         String canopyCentroids = outputFolder + "canopy-centroids";
         String clusterOutput = outputFolder + "clusters";
  
@@ -135,10 +86,10 @@ public class App
             fs.delete(oldClusterPath, true);
         }
  
-        CanopyDriver.run(new Path(vectorsFolder), new Path(canopyCentroids),
+        CanopyDriver.run(vectorsPath, new Path(canopyCentroids),
                 new EuclideanDistanceMeasure(), 20, 5, true, 0, true);
  
-        FuzzyKMeansDriver.run(new Path(vectorsFolder), new Path(
+        FuzzyKMeansDriver.run(vectorsPath, new Path(
                 canopyCentroids, "clusters-0-final"), new Path(clusterOutput),
                 0.01, 20, 2, true, true, 0, false);
     }
