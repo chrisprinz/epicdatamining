@@ -56,7 +56,11 @@ public class KmeansCluster {
                             return;
                         }
                         String[] values = line.split(",");
-                        double[] data = {Double.parseDouble(values[0]), Double.parseDouble(values[1])};
+                        double[] data = new double[values.length];
+                        for (int i = 0; i < values.length; i++) {
+                            data[i] = Double.parseDouble(values[i]);
+                        }
+                        //double[] data = {Double.parseDouble(values[0]), Double.parseDouble(values[1])};
 
                         DenseVector vector = new DenseVector(data);
 
