@@ -35,10 +35,9 @@ public class KmeansCluster {
         vectorPath = new Path(outputFolder, "vector");
     }
 
-    void readData() throws IOException {
+    void readData(String fileName) throws IOException {
         AtomicInteger count = new AtomicInteger();
 
-        String fileName = "book_example_data.txt";
         File file = new File("classes/data/" + fileName);
         System.out.println(file.getAbsolutePath());
         if (!file.exists()) {
@@ -60,7 +59,6 @@ public class KmeansCluster {
                         for (int i = 0; i < values.length; i++) {
                             data[i] = Double.parseDouble(values[i]);
                         }
-                        //double[] data = {Double.parseDouble(values[0]), Double.parseDouble(values[1])};
 
                         DenseVector vector = new DenseVector(data);
 
