@@ -1,0 +1,4 @@
+target/
+mahout.minhash.iml
+.idea/
+src/test/

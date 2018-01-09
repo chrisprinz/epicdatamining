@@ -1,8 +1,7 @@
-package main.java;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
@@ -14,11 +13,8 @@ import org.apache.mahout.math.DenseVector;
 import org.apache.mahout.math.VectorWritable;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class App {
 
@@ -28,7 +24,6 @@ public class App {
     private static final String VECTOR_DIRECTORY = TARGET_DIRECTORY + "vectors/";
     private static final String CENTROID_DIRECTORY = TARGET_DIRECTORY + "centroids/";
     private static final String CLUSTER_DIRECTORY = TARGET_DIRECTORY + "clusters/";
-    private static Map<String, Path> vectorPaths = new HashMap<>();
 
     private static Configuration configuration = new Configuration();
     private static FileSystem fileSystem;
@@ -39,7 +34,7 @@ public class App {
             initialize();
             for (String filename : filenames) {
                 readDocument(filename);
-                cleanFileSystem();
+                cleanFileSystem(filename);
                 performClustering(filename);
                 printSequenceFile(filename);
             }
@@ -55,19 +50,19 @@ public class App {
         fileSystem = FileSystem.get(configuration);
     }
 
-    private static void cleanFileSystem() throws IOException {
-        Path oldClusterPath = new Path(CLUSTER_DIRECTORY);
+    private static void cleanFileSystem(String fullFilename) throws IOException {
+        String filename = fullFilename.substring(0, fullFilename.lastIndexOf("."));
+        Path oldClusterPath = new Path(CLUSTER_DIRECTORY, filename);
         if (fileSystem.exists(oldClusterPath)) {
             fileSystem.delete(oldClusterPath, true);
         }
     }
 
-    private static void readDocument(String filename) {
-        File inputFile = new File(DATA_DIRECTORY + filename);
-        vectorPaths.put(filename, new Path(VECTOR_DIRECTORY, inputFile.getName()));
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+    private static void readDocument(String fullFilename) {
+        String filename = fullFilename.substring(0, fullFilename.lastIndexOf("."));
+        try (BufferedReader reader = new BufferedReader(new FileReader(DATA_DIRECTORY + fullFilename));
              SequenceFile.Writer writer = new SequenceFile.Writer(fileSystem,
-                     configuration, vectorPaths.get(filename), Text.class, Text.class)) {
+                     configuration, new Path(VECTOR_DIRECTORY, filename), Text.class, VectorWritable.class)) {
             long id = 0;
             String line;
             while ((line = reader.readLine()) != null) {
@@ -77,7 +72,7 @@ public class App {
                     values[i] = Double.parseDouble(elements[i]);
                 }
                 DenseVector vector = new DenseVector(values);
-                writer.append(id, new VectorWritable(vector));
+                writer.append(new Text(String.valueOf(id)), new VectorWritable(vector));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,21 +80,22 @@ public class App {
     }
 
     private static void performClustering(String fullFilename) {
-        String filename = fullFilename.substring(0, fullFilename.lastIndexOf(".") - 1);
+        String filename = fullFilename.substring(0, fullFilename.lastIndexOf("."));
         try {
             CanopyDriver.run(new Path(VECTOR_DIRECTORY, filename), new Path(CENTROID_DIRECTORY, filename),
                     new EuclideanDistanceMeasure(), 20, 5, true, 0, true);
 
-            FuzzyKMeansDriver.run(new Path(VECTOR_DIRECTORY, filename), new Path(CENTROID_DIRECTORY, filename, "final"),
+            FuzzyKMeansDriver.run(new Path(VECTOR_DIRECTORY, filename), new Path(CENTROID_DIRECTORY, filename+"/clusters-0-final"),
                     new Path(CLUSTER_DIRECTORY, filename), 0.01, 20, 2, true, true, 0, false);
         } catch (IOException | InterruptedException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private static void printSequenceFile(String filename) {
+    private static void printSequenceFile(String fullFilename) {
+        String filename = fullFilename.substring(0, fullFilename.lastIndexOf("."));
         SequenceFileIterable<Writable, Writable> iterable =
-                new SequenceFileIterable<>(new Path(CLUSTER_DIRECTORY, filename, "final"), configuration);
+                new SequenceFileIterable<>(new Path(CLUSTER_DIRECTORY, filename+"/clusteredPoints/part-m-00000"), configuration);
         iterable.forEach(pair -> System.out.format("%10s -> %s\n", pair.getFirst(), pair.getSecond()));
     }
 
