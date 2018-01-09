@@ -395,3 +395,32 @@ parent is only a subset of union of children
       since all points of cluster would be required but are discarded,
       due to space efficiency
 - merge and split clusters, adjust
+
+# Collaborative Filtering
+
+## Measure similarity between users
+
+- Problem: Two users watched same movies but rated opposite ratings
+- boolean scale (e.g. liked and disliked):
+    - Jaccard distance
+- non-boolean scale (e.g. 1-5):
+    - make boolean (through rounding) and then Jaccard distance
+    - cosine distance
+        - not necessarily good differentiation between similar and non-
+        similar users
+        - larger cosine -> smaller angle & smaller distance
+        - adding rounding first, differentiation is clearer
+        - normalization
+            - subtract from each rating the average rating of users
+            - ignore users with all equal ratings
+            - differentiation even clearer
+- recommendation process
+    - find most similar users
+    - recommend most highly rated movies
+
+### UV-Decomposition
+- reduce complexity by trying to reduce size of Utility Matrix `M` by
+dividing it into two matrices (`U`, `V`) that reduces MSE to original
+`M`
+    - use random starting point and solve gradually
+    - not guaranteed to find global minimum
