@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1,OT1]{fontenc}
+\usepackage{lmodern}
+\usepackage{listings}
+\usepackage{minted}
+\usepackage{amsmath}
+\usepackage[none]{hyphenat}
+\usepackage{multicol}
+\usepackage{pgfplots}
+\usepackage{makecell}
+\usepackage[nomessages]{fp}
+
+\title{Intelligent Data Mining - Exercise 7}
+\author{\fontencoding{T1}\selectfont Michael Debono Mrđen}
+\date{12 January 2018}
+
+\begin{document}
+
+\maketitle
+
+\section{Assignment 1: Content-based recommendation}
+\renewcommand{\labelenumi}{\alph{enumi}.}
+\renewcommand{\labelenumii}{\arabic{enumii}.}
+
+Three computers, A, B, and C, have the numerical features listed below:
+	
+	\begin{center}
+		\begin{tabular}{ l | c | c | c }
+			Feature          & A    & B    & C    \\ \hline
+			Processor Speed  & 3.06 & 2.68 & 2.92 \\
+			Disk Size        & 500  & 320  & 640  \\
+			Main-Memory Size & 6    & 4    & 6
+		\end{tabular}
+	\end{center}
+
+We may imagine these values as defining a vector for each computer; for instance, A's vector is
+[3.06,500,6]. We can compute the cosine distance between any two of the vectors, but if we do not scale the components, then the disk size will dominate and make differences in the other components essentially invisible. Let us use 1 as the scale factor for processor speed, $\alpha$ for the disk size, and $\beta$ for the main memory size.
+
+\begin{enumerate}
+\item{In terms of $\alpha$ and $\beta$, compute the cosines of the angles between the vectors for each pair of the three computers.
+	
+	\begin{itemize}
+		\item A = $[3.06, 500\alpha, 6\beta]$
+		\item B = $[2.68, 320\alpha, 4\beta]$
+		\item C = $[2.92, 640\alpha, 6\beta]$
+	\end{itemize}
+
+	$$\cos(AB) = \frac{(3.06)(2.68) + (500\alpha)(320\alpha) + (6\beta)(4\beta)}{\sqrt{3.06^2+(500\alpha)^2+(6\beta)^2} \sqrt{2.68^2+(320\alpha)^2+(4\beta)^2}}$$
+	
+	$$\cos(AC) = \frac{(3.06)(2.92) + (500\alpha)(640\alpha) + (6\beta)(6\beta)}{\sqrt{3.06^2+(500\alpha)^2+(6\beta)^2} \sqrt{2.92^2+(640\alpha)^2+(6\beta)^2}}$$
+	
+	$$\cos(CB) = \frac{(2.92)(2.68) + (640\alpha)(320\alpha) + (6\beta)(4\beta)}{\sqrt{2.92^2+(640\alpha)^2+(6\beta)^2} \sqrt{2.68^2+(320\alpha)^2+(4\beta)^2}}$$
+}
+
+\item{What are the angles between the vectors if $\alpha = \beta = 1$?
+	\begin{center}
+		\begin{tabular}{ l | l | l }
+			   & $\cos$       & $\angle$       \\ \hline
+			AB & 0.999997     & $0.1403^\circ$ \\
+			AC & 0.9999953431 & $0.1749^\circ$ \\
+			CB & 0.9999878534 & $0.2824^\circ$
+		\end{tabular}
+	\end{center}
+}
+
+\item{What are the angles between the vectors if $\alpha = 0.01$ and $\beta = 0.5$?
+	\begin{center}
+		\begin{tabular}{ l | l | l }
+			   & $\cos$   & $\angle$      \\ \hline
+			AB & 0.990882 & $7.743^\circ$ \\
+			AC & 0.991555 & $7.451^\circ$ \\
+			CB & 0.969178 & $14.26^\circ$
+		\end{tabular}
+	\end{center}
+}
+
+\item{A certain user has rated the three computers as follows: A: 4 stars, B: 2 stars, C: 5 stars. Normalize the ratings for this user.}
+\item{Compute a user profile for the user, with components for processor speed, disk size, and main memory size.}
+\end{enumerate}
+
+\section{Assignment 2: Singular Value Decomposition}
+Use the SVD form Fig. 11.7. Suppose Leslie assigns rating 3 to Alien and rating 4 to Titanic, giving us a representation of Leslie in "movie space" of [0,3,0,0,4]. Find the representation of Leslie in concept space. What does that representation predict about how well Leslie would like the other movies appearing in our example data?
+
+\section{Assignment 3: Singular Value Decomposition with Mahout}
+Use the data "netflix\_data.txt" uploaded in StudIP which contains real Netflix user ratings of 100 different movies. Pick 3 different users of your choice and print out the movie titles of the first 4 recommendations of each of the three following Mahout recommenders:
+\begin{itemize}
+	\item SVDRecommender using the SVDPlusPlusFactorizer
+	\item SVDRecommender using the ALSWRFactorizer
+	\item GenericUserBasedRecommender using and appropriate UserSimilarity and UserNeighborhood
+\end{itemize}
+
+\end{document}
