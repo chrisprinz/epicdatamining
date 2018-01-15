@@ -75,8 +75,39 @@ We may imagine these values as defining a vector for each computer; for instance
 	\end{center}
 }
 
-\item{A certain user has rated the three computers as follows: A: 4 stars, B: 2 stars, C: 5 stars. Normalize the ratings for this user.}
-\item{Compute a user profile for the user, with components for processor speed, disk size, and main memory size.}
+\item{A certain user has rated the three computers as follows: A: 4 stars, B: 2 stars, C: 5 stars. Normalize the ratings for this user.
+
+Average rating: $$\frac{4+2+5}{3} = 3.67$$
+
+Normalized ratings:
+	\begin{center}
+	\begin{tabular}{ c | c | c }
+		A    & B     & C    \\ \hline
+		0.33 & -1.67 & 1.33
+	\end{tabular}
+\end{center}
+}
+\item{Compute a user profile for the user, with components for processor speed, disk size, and main memory size.
+	
+	\begin{itemize}
+		\item Processor Speed = $[3.06, 2.68, 2.92]$
+		\item Disk Size = $[500, 320, 640]$
+		\item Main-Memory Size = $[6, 4, 6]$
+	\end{itemize}
+
+	Processor Speed component:
+	$$\frac{0.33(3.06)-1.67(2.68)+1.33(2.92)}{3} = 0.139$$
+
+	Disk Size component:
+	$$\frac{0.33(500)-1.67(320)+1.33(640)}{3} = 160.6$$
+	
+	Main-Memory Size component:
+	$$\frac{0.33(6)-1.67(4)+1.33(6)}{3} = 1.093$$
+
+	User profile:
+	$$[0.139, 160.6, 1.093]$$
+
+}
 \end{enumerate}
 
 \section{Assignment 2: Singular Value Decomposition}
