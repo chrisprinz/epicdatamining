@@ -113,6 +113,27 @@ Normalized ratings:
 \section{Assignment 2: Singular Value Decomposition}
 Use the SVD form Fig. 11.7. Suppose Leslie assigns rating 3 to Alien and rating 4 to Titanic, giving us a representation of Leslie in "movie space" of [0,3,0,0,4]. Find the representation of Leslie in concept space. What does that representation predict about how well Leslie would like the other movies appearing in our example data?
 
+$M'$ is $M$ including Leslie as the last row.
+
+\[
+M' = \begin{bmatrix}
+	1 & 1 & 1 & 0 & 0 \\
+	3 & 3 & 3 & 0 & 0 \\
+	4 & 4 & 4 & 0 & 0 \\
+	5 & 5 & 5 & 0 & 0 \\
+	0 & 0 & 0 & 4 & 4 \\
+	0 & 0 & 0 & 5 & 5 \\
+	0 & 0 & 0 & 2 & 2 \\
+	0 & 3 & 0 & 0 & 4
+\end{bmatrix}
+\]
+
+$U'$ is the concept space for the rows of $M'$ and is $U$ with the addition of the eigenvector introduced by Leslie.
+
+$U'_{Leslie} = [x,y]$
+
+This shows that Leslie would like romance movies slightly more than science fiction movies(, maybe).
+
 \section{Assignment 3: Singular Value Decomposition with Mahout}
 Use the data "netflix\_data.txt" uploaded in StudIP which contains real Netflix user ratings of 100 different movies. Pick 3 different users of your choice and print out the movie titles of the first 4 recommendations of each of the three following Mahout recommenders:
 \begin{itemize}
