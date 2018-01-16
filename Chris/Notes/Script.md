@@ -424,3 +424,37 @@ dividing it into two matrices (`U`, `V`) that reduces MSE to original
 `M`
     - use random starting point and solve gradually
     - not guaranteed to find global minimum
+
+
+# Dimensionality Reduction
+- general goal: high-dimensioned space but some are linear combinations
+of others --> find subspace with fewer dimensions
+
+## Eigenpair Analysis
+- **TODO**
+
+## Singular Value Decomposition (SVD)
+- goal: dimensionality reduction of matrices
+
+### Definition
+- Matrix `M` with `m` rows and `n` columns
+- rank `r`(number of independent rows)
+- `SVD = U x SIGMA x V`, where
+  - `U` has `m,r` dimensions, columns are unit vectors and orthogonal
+  --> column-orthonormal
+    - connects people to concepts
+  - `V` has `n,r` dimensions, also column-orthonormal --> `V^T` is
+  row-orthonormal
+    - connects items to concepts
+  - `SIMGA` is an `r,r` diagonal matrix
+    - specifies strengths of concepts
+- Lossy reduction possible, by ignoring the least strong concept(s)
+(`SIGMA`)
+  - compute sum of squares of singular values and retain at least 90%
+  - measure of difference: Frobenius norm `||M||` (proportional to RMSE)
+  - error proportional to those `SIMGA_i` changed
+
+### Querying
+-
+
+## CUR Decomposition
