@@ -1,0 +1,55 @@
+SVDPlusPlusFactorizer
+- User: 1641844
+    + Davy Crockett: 50th Anniversary Double Feature
+    + Dinosaur Planet
+    + The Lemon Drop Kid
+    + I Love Lucy: Season 2
+----------------------------------------------------
+- User: 1011593
+    + Carandiru
+    + Richard III
+    + Zatoichi's Conspiracy
+    + Inspector Morse 31: Death Is Now My Neighbour
+----------------------------------------------------
+- User: 519380
+    + Devo: The Complete Truth About De-evolution
+    + The Killing
+    + Invader Zim
+    + Zatoichi's Conspiracy
+----------------------------------------------------
+----------------------------------------------------
+ALSWRFactorizer
+- User: 1641844
+    + Lord of the Rings: The Return of the King: Extended Edition: Bonus Material
+    + Aqua Teen Hunger Force: Vol. 1
+    + ABC Primetime: Mel Gibson's The Passion of the Christ
+    + Elfen Lied
+----------------------------------------------------
+- User: 1011593
+    + Invader Zim
+    + I Love Lucy: Season 2
+    + ABC Primetime: Mel Gibson's The Passion of the Christ
+    + Lord of the Rings: The Return of the King: Extended Edition: Bonus Material
+----------------------------------------------------
+- User: 519380
+    + Lord of the Rings: The Return of the King: Extended Edition: Bonus Material
+    + ABC Primetime: Mel Gibson's The Passion of the Christ
+    + I Love Lucy: Season 2
+    + Inspector Morse 31: Death Is Now My Neighbour
+----------------------------------------------------
+----------------------------------------------------
+GenericUserBasedRecommender
+- User: 1641844
+----------------------------------------------------
+- User: 1011593
+    + Elfen Lied
+    + The Rise and Fall of ECW
+    + I Love Lucy: Season 2
+    + Invader Zim
+----------------------------------------------------
+- User: 519380
+    + Invader Zim
+    + WWE: Armageddon 2003
+    + Antarctica: IMAX
+    + Lady Chatterley
+----------------------------------------------------
