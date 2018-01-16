@@ -1,0 +1,46 @@
+SVDRecommender using the SVDPlusPlusFactorizer
+Recommended for user 699878:
+Maya Lin: A Strong Clear Vision
+Rudolph the Red-Nosed Reindeer
+I Love Lucy: Season 2
+The Bad and the Beautiful
+Recommended for user 835810:
+I Love Lucy: Season 2
+The Bad and the Beautiful
+ABC Primetime: Mel Gibson's The Passion of the Christ
+The Love Letter
+Recommended for user 1290128:
+Screamers
+Justice League
+Davy Crockett: 50th Anniversary Double Feature
+Jade
+
+SVDRecommender using the ALSWRFactorizer
+Recommended for user 699878:
+Ken Burns' America: Empire of the Air
+Elfen Lied
+Aqua Teen Hunger Force: Vol. 1
+Lord of the Rings: The Return of the King: Extended Edition: Bonus Material
+Recommended for user 835810:
+Lord of the Rings: The Return of the King: Extended Edition: Bonus Material
+Aqua Teen Hunger Force: Vol. 1
+ABC Primetime: Mel Gibson's The Passion of the Christ
+Invader Zim
+Recommended for user 1290128:
+Lord of the Rings: The Return of the King: Extended Edition: Bonus Material
+Aqua Teen Hunger Force: Vol. 1
+Zatoichi's Conspiracy
+The Killing
+
+GenericUserBasedRecommender
+Recommended for user 699878:
+The Battle of Algiers: Bonus Material
+Rudolph the Red-Nosed Reindeer
+Richard III
+What the #$*! Do We Know!?
+Recommended for user 835810:
+Recommended for user 1290128:
+Record of Lodoss War: Chronicles of the Heroic Knight
+I Love Lucy: Season 2
+Immortal Beloved
+Mostly Martha
