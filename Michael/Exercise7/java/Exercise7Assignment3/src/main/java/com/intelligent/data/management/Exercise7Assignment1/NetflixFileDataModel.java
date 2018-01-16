@@ -13,14 +13,14 @@ public class NetflixFileDataModel extends org.apache.mahout.cf.taste.impl.model.
 		super(dataFile);
 	}
 
-	/**
-	 * Subclasses may wish to override this if ID values in the file are not numeric. This provides a hook by which
-	 * subclasses can inject an IDMigrator to perform translation.
-	 */
 	@Override
 	protected long readItemIDFromString(String value) {
 	    long result = idMigrator.toLongID(value);
 	    idMigrator.storeMapping(result, value);
 	    return result;
+	}
+	
+	public String getMovieNameFromID(long itemID) {
+		return idMigrator.toStringID(itemID);
 	}
 }
