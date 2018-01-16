@@ -10,10 +10,11 @@
 \usepackage{pgfplots}
 \usepackage{makecell}
 \usepackage[nomessages]{fp}
+\usepackage{verbatim}
 
 \title{Intelligent Data Mining - Exercise 7}
 \author{\fontencoding{T1}\selectfont Michael Debono Mrđen}
-\date{12 January 2018}
+\date{16 January 2018}
 
 \begin{document}
 
@@ -141,6 +142,15 @@ Use the data "netflix\_data.txt" uploaded in StudIP which contains real Netflix 
 	\item SVDRecommender using the ALSWRFactorizer
 	\item GenericUserBasedRecommender using and appropriate UserSimilarity and UserNeighborhood
 \end{itemize}
+
+Output:
+\verbatiminput{output.txt}
+
+NetflixFileDataModel.java:
+\inputminted[breaklines=true]{java}{NetflixFileDataModel.java}
+
+App.java:
+\inputminted[breaklines=true]{java}{App.java}
 
 \end{document}
 
