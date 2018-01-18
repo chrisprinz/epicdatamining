@@ -96,7 +96,45 @@ rating(A) =  1/3
 rating(B) = -5/3
 rating(C) =  4/3
 
-Processor Speed: 3.06 * 1/3 + 2.68 * (-5/3) + 2.92 * 4/3 = 0.44666
-Disk Size: 500 * 1/3 + 320 * (-5/3) + 640 * 4/3 = 486.66666
-MMS: 6 * 1/3 + 4 * (-5/3) + 6 * 4/3 = 3.33333
+Processor Speed: (3.06 * 1/3 + 2.68 * (-5/3) + 2.92 * 4/3) / 3 = 0.1489
+Disk Size: (500 * 1/3 + 320 * (-5/3) + 640 * 4/3) / 3 = 162.2
+MMS: (6 * 1/3 + 4 * (-5/3) + 6 * 4/3) / 3 = 1.11111
 ```
+
+# Singular Value Decomposition
+M:
+```
+        M A S C T
+Joe     1 1 1 0 0
+Jim     3 3 3 0 0
+John    4 4 4 0 0
+Jack    5 5 5 0 0
+Jill    0 0 0 4 4
+Jenny   0 0 0 5 5
+Jane    0 0 0 2 2
+Lelsie  0 3 0 0 4
+```
+
+SVD:
+```
+M = U * SIGMA * V^T
+
+
+
+1 1 1 0 0       .14 0
+3 3 3 0 0       .42 0
+4 4 4 0 0       .56 0
+5 5 5 0 0       .7  0         12.4 0         .58 .58 .58 0   0
+0 0 0 4 4   =   0   .6    *   0    9.5   *   0   0   0   .71 .71
+0 0 0 5 5       0   .75
+0 0 0 2 2       0   .3
+0 3 0 0 4       u1   u2
+
+SIGMA and V^T stay the same -->
+
+u1 = 0.42
+u2 = 0.6
+```
+
+This predicts, that she would rate Matrix and Star Wars with approx. 3
+stars and Casablanca with approx. 4 stars.
