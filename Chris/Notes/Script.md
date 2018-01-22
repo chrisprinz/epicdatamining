@@ -395,3 +395,66 @@ parent is only a subset of union of children
       since all points of cluster would be required but are discarded,
       due to space efficiency
 - merge and split clusters, adjust
+
+# Collaborative Filtering
+
+## Measure similarity between users
+
+- Problem: Two users watched same movies but rated opposite ratings
+- boolean scale (e.g. liked and disliked):
+    - Jaccard distance
+- non-boolean scale (e.g. 1-5):
+    - make boolean (through rounding) and then Jaccard distance
+    - cosine distance
+        - not necessarily good differentiation between similar and non-
+        similar users
+        - larger cosine -> smaller angle & smaller distance
+        - adding rounding first, differentiation is clearer
+        - normalization
+            - subtract from each rating the average rating of users
+            - ignore users with all equal ratings
+            - differentiation even clearer
+- recommendation process
+    - find most similar users
+    - recommend most highly rated movies
+
+### UV-Decomposition
+- reduce complexity by trying to reduce size of Utility Matrix `M` by
+dividing it into two matrices (`U`, `V`) that reduces MSE to original
+`M`
+    - use random starting point and solve gradually
+    - not guaranteed to find global minimum
+
+
+# Dimensionality Reduction
+- general goal: high-dimensioned space but some are linear combinations
+of others --> find subspace with fewer dimensions
+
+## Eigenpair Analysis
+- **TODO**
+
+## Singular Value Decomposition (SVD)
+- goal: dimensionality reduction of matrices
+
+### Definition
+- Matrix `M` with `m` rows and `n` columns
+- rank `r`(number of independent rows)
+- `SVD = U x SIGMA x V`, where
+  - `U` has `m,r` dimensions, columns are unit vectors and orthogonal
+  --> column-orthonormal
+    - connects people to concepts
+  - `V` has `n,r` dimensions, also column-orthonormal --> `V^T` is
+  row-orthonormal
+    - connects items to concepts
+  - `SIMGA` is an `r,r` diagonal matrix
+    - specifies strengths of concepts
+- Lossy reduction possible, by ignoring the least strong concept(s)
+(`SIGMA`)
+  - compute sum of squares of singular values and retain at least 90%
+  - measure of difference: Frobenius norm `||M||` (proportional to RMSE)
+  - error proportional to those `SIMGA_i` changed
+
+### Querying
+-
+
+## CUR Decomposition
