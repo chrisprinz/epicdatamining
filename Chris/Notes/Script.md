@@ -458,3 +458,49 @@ of others --> find subspace with fewer dimensions
 -
 
 ## CUR Decomposition
+
+
+# Machine Learning
+
+## Types
+
+### Supervised Learning (covered)
+- labeled data
+
+### Unsupervised Learning (not covered)
+- unlabeled data
+- example problem: clustering
+
+## (Classification) Model
+- known data (training set & test set)
+    - feature vectors
+    - correct classification
+- train model on known data to learn some function `f`
+- goal of finding best `f`
+- Feature Selection
+
+### Special cases
+- Regression (`f(x)` is a real number)
+- Binary Classification (`f(x)` is a boolean)
+- Multiclass classification (`f(x)` is a member of some finite set)
+
+### Approaches
+- Decision Tree
+- Perceptron
+    - Winnow algorithm
+        - for positive examples (y = 1) that are wrongly classified,
+        multiply weight vector by a factor > 1 but only for components of
+        input vector that are 1
+        - for negative examples, analogously multiply by a factor < 1
+        - this addresses the weights that are responsible for the wrong
+        classification directly
+- Neural Network
+- Instance-based Learning (includes not only input but all available
+data)
+- Support Vector Machine (SVM)
+
+### Machine Learning Architecture
+- Split data into training- and test data sets
+- avoid overfitting
+    - cross validation
+- Batch vs. online learning (learn once, continuous improvement)
