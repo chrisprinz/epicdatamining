@@ -1,25 +1,25 @@
 # Data Mining
 
-## What is Data Mining?
-This term refers to the process of extracting useful models of data.
-Sometimes, a model can be a summary of the data, or it can be the set of
-most extreme features of the data.
-
-### Statistical Modeling
-
-### Machine Learning
-
-### Computational Approaches
-
-### Summary
-
-### Feature Extraction
-
-***
+- What is Data Mining?
+    - Finding models for data.
+- Statistical Modeling
+    - underlying distribution, from which visible data is drawn
+-  Machine Learning
+    - especially useful if unclear what is searched for, i.e. movie
+    recommendations
+    - examples: Bayes nets, support-vector machines, decision trees,
+    hidden Markov models...
+- Computational Approaches
+    - data mining as algorithmic problem
+    - model as answer to complex query
+    - Summarization
+        - represent / simplify data through a more simple form
+    - Feature Extraction
+        - find most extreme examples and use them to represent data
+        - frequent itemsets (see below)
+        - similar items (see below)
 
 ## Statistical Limits on Data Mining
-
-### Total Information Awareness
 
 ### Bonferroni's Principle
 Not all assumptions that might make sense are statistically significant.
@@ -33,7 +33,7 @@ TF (Term-Frequency)
   : How often does a word occur in a document?
   
 IDF (Inverse Document Frequency)
-  : **TODO**
+  : In how many documents does a word occur?
   
 TF.IDF (Combination of TF and IDF)
   : What is the topic of a document? What words appear relatively rarely
@@ -77,6 +77,7 @@ number of sales` and `x: rank of books by sales`
 Mathew Effect
   :Strong features are likely to be strengthened further
 
+***
 ***
 
 # Finding Similar Items
