@@ -1,5 +1,4 @@
 # Data Mining
-
 - What is Data Mining?
     - Finding models for data.
 - Statistical Modeling
@@ -19,11 +18,13 @@
         - frequent itemsets (see below)
         - similar items (see below)
 
+
 ## Statistical Limits on Data Mining
 
 ### Bonferroni's Principle
 Not all assumptions that might make sense are statistically significant.
 Rareness is often a critical factor.
+
 
 ## Useful Things to know
 
@@ -74,18 +75,19 @@ variables `x, y`
 - e.g. `log_10(y) = 6 - 2 log_10(x)` (1,000,000 --> 1,000) for `y:
 number of sales` and `x: rank of books by sales`
 
-Mathew Effect
+**Mathew Effect**
   :Strong features are likely to be strengthened further
 
+
+
 ***
 ***
+
+
 
 # Finding Similar Items
-**TODO**
 
-## Applications of Near-Neighbor Search
-**TODO**
-
+## Similarities
 ### Jaccard Similarity of Sets
 Similarity defined as Relative Size of Intersection
   : intersection of two sets / union of two sets (maximum: 1)
@@ -94,6 +96,7 @@ Similarity defined as Relative Size of Intersection
 - intersection size = minimum number of occurrences in both bags
 - union size: sum of occurrences (intersections are counted twice)
 - maximum similarity: 1/2
+
 ### Similarity of Documents
 - only considering syntax level, not semantics
 - used for finding (near) duplicates (e.g.)
@@ -103,10 +106,18 @@ Similarity defined as Relative Size of Intersection
     - movie ratings (similarity between movies)
 
 ### Collaborative Filtering as a Similar-Sets Problem
-**TODO**
+- recommend items based on similar user's preferences
+- applications:
+    - On-Line Purchases
+        - due to large dimensionality, similarity need not be high to be
+        significant
+        - possible gain through additional clustering (e.g. sci-fi books)
+    - Movie Ratings
+        - non-binary scale introduces complexity
+
 
 ## Shingling of Documents
-**TODO**
+- simplest way to compare lexical similarity of textual documents
 
 ### k-Shingles (=k-gram)
 - using shingles on character level poses some difficulties (e.g.
@@ -124,7 +135,9 @@ whitespaces), but has the advantage of ignoring possible typos
 - reduces needed storage size
 
 ### Shingles Built from Words
-**TODO**
+- create shingle from stop words followed by other words (e.g. for
+finding similar news articles)
+
 
 ## Similarity-Preserving Summaries of Sets
 - Applying Jaccard Similarity on shingles of documents might lead to too
@@ -133,24 +146,26 @@ many large sets
 - --> estimate Jaccard similarity by computing the fraction of rows in
 the signature matrix that agree
 
-**Characteristic Matrix**
-  : Matrix representation of sets (columns ~ sets / e.g. documents, rows
-  ~ possible elements / e.g. shingles)
+### Matrix representation of sets
+- Characteristic Matrix
+- (columns ~ sets / e.g. documents, rows ~ possible elements / e.g.
+shingles)
 
+### Minhashing
 - Calculate *Min-Hash*
-  - permute rows randomly 
-  - find first identifier with `1` (element)
+    - permute rows randomly
+    - find first identifier with `1` (element)
 - Probability of two Min-Hashes of Documents to be the same *equals* the
 Jaccard Similarity
 - Proof
-  - 3 Types of rows: *X* if both `1`, *Y* if one `1`, *Z* if both `0`
-  - Most rows are of type *Z*
-  - ratio of type *X* to type *Y*
-  - *x*: amount of type *X* rows; *y*: amount of type *Y* rows
-  - Jaccard Similarity: `|S_1 \intersection S_2| / |S_1 \union S_2| =
-  x / x + y`
-  - Probability of *X* row appears before type *Y* row = `x / x + y`
-  - Becomes reasonable by repeating multiple times
+    - 3 Types of rows: *X* if both `1`, *Y* if one `1`, *Z* if both `0`
+    - Most rows are of type *Z*
+    - ratio of type *X* to type *Y*
+    - *x*: amount of type *X* rows; *y*: amount of type *Y* rows
+    - Jaccard Similarity: `|S_1 \intersection S_2| / |S_1 \union S_2| =
+    x / x + y`
+    - Probability of *X* row appears before type *Y* row = `x / x + y`
+    - Becomes reasonable by repeating multiple times
 
 **Minhash Signature**
   : vector of hash values for set `S: [h_1(S), ...
@@ -164,15 +179,26 @@ Jaccard Similarity
   : compute minhash signatures by random hashes of row identifiers -->
   new permutations
 
-## Locality-sensitive Hashing
-- Finding pairs "most similar"
-- hashing minhash signatures several times
-- **choose hashes that map minhash signatures to buckets**
-- for every signature hash bands consisting of `r` rows each
-- if two columns map to the same bucket for any band, *candidate pair*
+### Computing Minhash Signatures
+**TODO**
 
+## Locality-sensitive Hashing
+- Finding pairs "most likely similar" (potentially because data is too
+big to compare all sets
+- hashing minhash signatures several times
+- **choose hashes that map minhash signatures to buckets** for full
+similarity analysis
+- for every signature, divide characteristic matrix into `b` hash bands
+consisting of `r` rows each
+- if two columns map to the same bucket for any band, *candidate pair*
+- Jaccard similarity of documents --> probability of becoming a
+candidate pare in an s-curve fashion
+- combination of approaches consists of locality-sensitive hashing first,
+then do actual comparison through minhash, possibly also followed by
+full Jaccard similarity
 
 **Todo** look at first three slides of lecture 2017-11-21
+
 
 ## Distance Measures
 - Jaccard similarity `0..1` --> Jaccard distance `0..1`, = 1 - Jaccard
@@ -180,12 +206,35 @@ similarity
 - Defined as a set of points (*space*), with e.g. points `x` and `y`
 - function
 - Distance axioms
-  - `d(x,y) >= 0` (non-negativity)
-  - `d(x,y) = 0 <--> x = y` (identity)
-  - `d(x,y) = d(y,x)` (symmetry)
-  - `d(x,y) <= d(x,z) + d(z,y)` (triangle-inequality)
+    - `d(x,y) >= 0` (non-negativity)
+    - `d(x,y) = 0 <--> x = y` (identity)
+    - `d(x,y) = d(y,x)` (symmetry)
+    - `d(x,y) <= d(x,z) + d(z,y)` (triangle-inequality)
 
-**Todo** Details on different Distance measures from book
+### Euclidean Distance
+- L2-Norm
+    - `sqrt(sum(squared distance in each dimension))`
+    - shortest line between two points
+- LR-Norm
+    - like L2 norm but with exponent and root degree `r` instead of `2`
+- Manhattan Distance
+    - = L1 Norm
+    - `sum(distance in each dimension)`
+- L-infinity Distance
+    - with `r` getting larger, only the biggest difference matters
+    - `max(distance in each dimension)`
+
+### Cosine Distance
+- angle between two vectors (regardless of length) (between 0 and 180°)
+- calculate through `=arc cos(x * y / (|x| * |y|))
+
+### Edit Distance
+- only for strings
+- smallest number of insertions and deletions that convert `x` to `y`
+
+### Hamming Distance
+- = number of components that differ
+
 
 ## Theory of Locality - sensitive functions
 - function families like Jaccard Similarity have following properties:
@@ -214,6 +263,7 @@ false negatives are reduced
 - if cascading **OR** with **AND** for `r = b = 4`, false positives
 increase
 
+
 ## LSH families for other distance measures
 
 ### Hamming Distance
@@ -221,7 +271,12 @@ increase
 - Family of functions is defined as creating one function for each
 component and `f_i(x) = f_i(y)` iff `x,y` agree in component `i`
 
+**TODO**: integrate Summary of Chapter 3
+
 ***
+***
+
+
 
 # Clustering
 Input:
