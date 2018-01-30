@@ -560,3 +560,33 @@ data)
 - avoid overfitting
     - cross validation
 - Batch vs. online learning (learn once, continuous improvement)
+
+
+## Learning from Nearest Neighbors
+- training set is given
+- find closest training examples for new query point
+- estimate label by combining labels from closest neighbors
+- open questions
+    - what distance measure
+    - how many nearest neighbors
+    - weighting of neighbors
+    - function for labeling from given neighbor labels
+
+### Learning 1D-Functions
+- for new point `x` --> new label `y = f(x')`, where `x'` are nearest
+neighbors of `x`
+- possible methods for labeling `x`
+    - copy label of nearest neighbor
+    - average over `k` nearest neighbors without or even with weighting
+        - weighting ~ inverse distance
+        - normalization over sum of weights
+
+
+
+# Q & A
+- content based recommendations --> user profiles
+    - what do the values in a user profile mean intuitively?
+        - only gives you information relative to other users, or in
+        relation to items directly
+        - can be useful in first step in analysis, e.g. for rating
+        prediction, using the cosine distance
