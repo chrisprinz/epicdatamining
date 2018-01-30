@@ -36,7 +36,7 @@
 
 TF (Term-Frequency)
   : How often does a word occur in a document?
-  TF_{ij}=\fraq{f_{ij}}{max_kf_{kj}}
+  `TF_{ij}=\fraq{f_{ij}}{max_kf_{kj}}`
   
 IDF (Inverse Document Frequency)
   : In how many documents does a word occur?
