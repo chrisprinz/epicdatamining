@@ -13,6 +13,7 @@
     - model as answer to complex query
     - Summarization
         - represent / simplify data through a more simple form
+        - e.g. "PageRank", clustering
     - Feature Extraction
         - find most extreme examples and use them to represent data
         - frequent itemsets (see below)
