@@ -26,7 +26,8 @@
 - Not all assumptions that might make sense are statistically significant.
 - Rareness is often a critical factor.
 - Bonferroni correction: clear data to avoid 'bogus' data 
-- compare observations with expected number of positives 
+- compare observations with expected number of positives (assuming randomness) 
+- e.g. exercise with evil-doers
 
 
 ## Useful Things to know
@@ -35,11 +36,12 @@
 
 TF (Term-Frequency)
   : How often does a word occur in a document?
+  TF_{ij}=\fraq{f_{ij}}{max_kf_{kj}}
   
 IDF (Inverse Document Frequency)
   : In how many documents does a word occur?
   
-TF.IDF (Combination of TF and IDF)
+TF.IDF (*Term Frequency times Inverse Document Frequency*, Combination of TF and IDF)
   : What is the topic of a document? What words appear relatively rarely
    but if they do appear, they appear often within one document?
 
