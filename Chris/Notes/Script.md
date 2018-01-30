@@ -16,8 +16,8 @@
         - e.g. "PageRank", clustering
     - Feature Extraction
         - find most extreme examples and use them to represent data
-        - frequent itemsets (see below)
-        - similar items (see below)
+        - frequent itemsets (hamburger and ketchup are frequently bought together)(see below)
+        - similar items (recommendation based on customers with similar taste)(see below)
 
 
 ## Statistical Limits on Data Mining
