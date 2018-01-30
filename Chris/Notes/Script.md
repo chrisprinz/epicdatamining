@@ -23,8 +23,10 @@
 ## Statistical Limits on Data Mining
 
 ### Bonferroni's Principle
-Not all assumptions that might make sense are statistically significant.
-Rareness is often a critical factor.
+- Not all assumptions that might make sense are statistically significant.
+- Rareness is often a critical factor.
+- Bonferroni correction: clear data to avoid 'bogus' data 
+- compare observations with expected number of positives 
 
 
 ## Useful Things to know
