@@ -680,20 +680,18 @@ Calculation
 
 ## Types
 
-### Supervised Learning (covered)
-- labeled data
-
-### Unsupervised Learning (not covered)
-- unlabeled data
-- example problem: clustering
+- Supervised Learning (covered)
+  - labeled data
+- Unsupervised Learning (not covered)
+  - unlabeled data
+  - example problem: clustering
 
 ## (Classification) Model
-- known data (training set & test set)
-    - feature vectors
-    - correct classification
+- known data (training set & test set) consisting of pairs ($x, y$)
+    - feature vectors ($x$)
+    - label or correct classification ($y$)
 - train model on known data to learn some function $f$
 - goal of finding best $f$
-- Feature Selection
 
 ### Special cases
 - Regression ($f(x)$ is a real number)
@@ -701,28 +699,55 @@ Calculation
 - Multiclass classification ($f(x)$ is a member of some finite set)
 
 ### Approaches
-- Decision Tree
-- Perceptron
-    - Winnow algorithm
-        - for positive examples (y = 1) that are wrongly classified,
-          multiply weight vector by a factor > 1 but only for components of
-          input vector that are 1
-        - for negative examples, analogously multiply by a factor < 1
-        - this addresses the weights that are responsible for the wrong
-          classification directly
-- Neural Network
-- Instance-based Learning (includes not only input but all available
-  data)
-- Support Vector Machine (SVM)
+- Decision Tree (suitable for binary and multiclass classification if $|x|$ small)
+- Perceptron (suitable for binary classification also if $|x|$ very large)
+- Neural Network (suitable for both classifications and very large $|x|$)
+- Instance-based Learning (e.g. nearest neighbor) (suitable for classifications of real numbers)
+- Support Vector Machine (SVM)(suitable for classification, especially of unseen data)
 
 ### Machine Learning Architecture
+
 - Split data into training- and test data sets
 - avoid overfitting
     - cross validation
 - Batch vs. online learning (learn once, continuous improvement)
+- Feature Selection (which features to use?)
+- Creating a training set (how to get labels?)
+    - by hand
+    - by inference of other known data e.g. topic
+
+
+## Perceptrons
+
+- linear binary classifier
+- can be extended to a multiclass classifier by using multiple perceptrons - one for each class
+- converge only if there exists a solution (in contrast to support-vector machines that will always converge)
+- training
+  - for each training pair ($x, y$)
+    - let $y' = w.x$
+    - if $y'$ and $y$ have different signs, adjust $w := w + \eta y x$, which will adjust it slightly towards $x$
+- critique
+  - cannot classify if unambiguously linear separable (workaround might lead to overfitting)
+  - only finds some hyperplane, not the best
+
+### Winnow algorithm
+
+- for positive examples ($y = 1$) that are wrongly classified, multiply weight vector by a factor $> 1$ but only for components of input vector that are $1$
+- for negative examples, analogously multiply by a factor $< 1$
+- this addresses the weights that are responsible for the wrong classification directly
+
+### Allowing the Threshold to Vary
+
+- add threshold $\theta$ to weight vector $w$
+- add $-1$ to each feature vector $x$
+- then perform algorithm as before $\rightarrow$ will now yield a threshold by itself
+
+## Support-Vector Machines
+
 
 
 ## Learning from Nearest Neighbors
+
 - training set is given
 - find closest training examples for new query point
 - estimate label by combining labels from closest neighbors
@@ -733,7 +758,7 @@ Calculation
     - function for labeling from given neighbor labels
 
 ### Learning 1D-Functions
-- for new point $x$ \rightarrow new label $y = f(x')$, where $x'$ are nearest
+- for new point $x$ $\rightarrow$ new label $y = f(x')$, where $x'$ are nearest
   neighbors of $x$
 - possible methods for labeling $x$
     - copy label of nearest neighbor
