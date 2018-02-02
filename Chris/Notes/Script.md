@@ -584,7 +584,7 @@ Calculation
 - Initilizing $U,V$
   - ensure randomness to find global minimum by vary initial values or way of seeking
   - each element in $U,V$ with same value (so that average of products equals average of $M$)
-  - $\sqrt{\frac{a}{d}}$ , where $a$ is the average of $M$ and $d$ is the number of concepts (= dimensionality)
+  - $\sqrt{\frac{a}{d}}$ , where $a$ is the average of $M$ and $d$ is the dimensionality from above
   - possibly add normal distribution over starting values
 - Ordering the optimization of the elements of $U,V$
   - choose order in which to optimize $U,V$ entries
@@ -597,38 +597,84 @@ Calculation
 
 # Dimensionality Reduction
 
-- general goal: high-dimensioned space but some are linear combinations
-  of others \rightarrow find subspace with fewer dimensions
+- general goal: high-dimensioned space but some are linear combinations of others $\rightarrow$ find subspace with fewer dimensions
 
 ## Eigenpair Analysis
-- **TODO**
+
+- square Matrix $M$
+- constant $\lambda$
+- nonzero column vector $e$ with same number of rows as $M$
+- $Me = \lambda e \leftrightarrow$ $\lambda$ is *eigenvalue* of $M$ and $e$ is the corresponding *eigenvector* of $M$
+  - for any constant $c$, $ce$ would also be an *eigenvector* (because same direction, only different length), therefore use unit vectors only
+  - also require first non-zero value to be positive (to make unique)
+
+**Eigenpair**: Combination of eigenvalue and eigenvector (can be computed iteratively)
+
+**Principal Component Analysis**: principal eigenvector is aligned with the axis of the data's maximum variance (not relevant)
 
 ## Singular Value Decomposition (SVD)
+
 - goal: dimensionality reduction of matrices
+- approximation with abstraction in form of concepts
 
 ### Definition
-- Matrix $M$ with $m$ rows and $n$ columns
-- rank $r$(number of independent rows)
-- $SVD = U x SIGMA x V$, where
-  - $U$ has $m,r$ dimensions, columns are unit vectors and orthogonal
-    \rightarrow column-orthonormal
+
+- Matrix $M:m \times n$
+- rank $r$ (number of independent rows)
+- $SVD: M = U \Sigma V^T$, where
+  - $U:m \times r$, columns are unit vectors and orthogonal $\rightarrow$ *column-orthonormal*
     - connects people to concepts
-  - $V$ has $n,r$ dimensions, also column-orthonormal \rightarrow $V^T$ is
-    row-orthonormal
+  - $V: n \times r$ dimensions, also column-orthonormal $\rightarrow$ $V^T$ is *row-orthonormal*
     - connects items to concepts
-  - $SIMGA$ is an $r,r$ diagonal matrix
+  - $\Sigma: r \times r$, diagonal matrix
     - specifies strengths of concepts
-- Lossy reduction possible, by ignoring the least strong concept(s)
-  ($SIGMA$)
-  - compute sum of squares of singular values and retain at least 90%
+- can be exact if number of concepts equals rank of $M$
+
+### Dimensionality Reduction using SVD
+
+- Lossy reduction possible, by ignoring the least strong concept(s) (from $\Sigma$)
   - measure of difference: Frobenius norm $||M||$ (proportional to RMSE)
-  - error proportional to those $SIMGA_i$ changed
+  - rule of thumb for amount of reduction: retain at least 90% of $||M||^2$
+  - error proportional to those $\Sigma_i$ changed
 
 ### Querying
--
+- for prediction of user item relations, one can use concept space for recommendations
+  - multiply user row in $M$ with $V$ to get user's representation in concept space (i.e. preferences)
+- find similar users using cosine distance of their representation in concept space
+
+### Computing SVD-Reduction
+
+- use fancy math to yield $M^T M V = V \Sigma^2$
+  - $V$ is the matrix of *eigenvectors* of $M^T M$ and $\Sigma^2$ is a diagonal matrix containing the corresponding *eigenvalues* 
+- analogously find $U$ through $M M^T U = U \Sigma^2$
 
 ## CUR Decomposition
 
+- Real applications often have huge matrices that are very sparse
+- With *SVD*, even if $M$ is sparse, $U,V$ will be dense $\rightarrow$ not practical
+- Again, decompose $M$, but this time into $CUR$ (columns and rows)
+  - $C,R$ will be sparse
+  - $U$ (analog to $\Sigma$) will be dense, but small, therefor practical
+  - Always an approximation, converges towards $M$ for big $r$, but if choosing vectors according to importance for small $r$, intuitively should be a good approximation
+
+### Definition
+
+- Matrix $M:m \times n$
+- target number of concepts $r$ 
+- $CUR: M = C U R$, where
+  - $C:m \times r$, randomly chosen set of $r$ columns of $M$
+  - $U: r \times r$ constructed from $C,R$
+    - let $W$ be the intersection of $C,R$
+    - compute SVD of $W = X \Sigma Y^T$
+    - compute $\Sigma^+$, the *Moore-Penrose pseudoinverse* of $\Sigma$ (i.e. leave all $0$'s, replace all other values $\sigma$ by their inverse: $\frac{1}{\sigma}$ )
+    - let $U = Y (\Sigma^+)^2 X^T$
+  - $R: r \times n$, randomly chosen set of $r$ rows of $M$
+
+### Choosing Rows and Columns Properly
+
+- random, but biased choice of rows and columns
+- use most useful ones with highest energy ($||r||^2$ or $||c||^2$)
+- scale vectors by their probability of times being picked
 
 # Machine Learning
 
@@ -698,9 +744,10 @@ Calculation
 
 
 # Q & A
-- content based recommendations \rightarrow user profiles
+- content based recommendations $\rightarrow$ user profiles
     - what do the values in a user profile mean intuitively?
         - only gives you information relative to other users, or in
           relation to items directly
         - can be useful in first step in analysis, e.g. for rating
           prediction, using the cosine distance
+
