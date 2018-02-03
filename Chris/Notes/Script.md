@@ -1,8 +1,10 @@
-# Data Mining
+# Intelligent Data Management
 
 [TOC]
 
+***
 
+# Data Mining
 
 - What is Data Mining?
     - Finding models for data.
@@ -239,11 +241,8 @@ Similarity defined as Relative Size of Intersection: intersection of two sets / 
 
 
 ***
-***
-
-
-
 # Clustering
+
 **Input**: Collection of Points
 **Goal**: Group them based on some measure (i.e. distance)
 - useful summary of data (points in some space)
@@ -455,10 +454,6 @@ After last chunk:
 
 
 ***
-***
-
-
-
 # Recommendation Systems
 
 **content-based systems**: examine properties of items
@@ -595,6 +590,8 @@ Calculation
   - possibly use threshold or (stochastic) gradient descent
   - avoid overfitting (only move fraction, stop before convergence or average multiple different UV-Decompositions)
 
+***
+
 # Dimensionality Reduction
 
 - general goal: high-dimensioned space but some are linear combinations of others $\rightarrow$ find subspace with fewer dimensions
@@ -675,6 +672,8 @@ Calculation
 - random, but biased choice of rows and columns
 - use most useful ones with highest energy ($||r||^2$ or $||c||^2$)
 - scale vectors by their probability of times being picked
+
+***
 
 # Machine Learning
 
@@ -775,8 +774,10 @@ Calculation
         - normalization over sum of weights
 
 
+***
 
 # Q & A
+
 - content based recommendations $\rightarrow$ user profiles
     - what do the values in a user profile mean intuitively?
         - only gives you information relative to other users, or in
