@@ -744,7 +744,15 @@ Calculation
 
 ## Support-Vector Machines
 
+- extends perceptron by finding hyperplane that maximizes distance to closest points of training set
+- support vectors constrain the dividing hyperplane, all have distance $\gamma$ to it
+- for $n$ dimensions, usually $n + 1$ support vectors (but possibly more) exists
 
+### Normalizing the Hyperplane
+
+- normalize weight vector $w$ as $\frac{w}{||w||}$, because otherwise no maximum can be found (bigger always better)
+- maximizing $\gamma$ can be reformulated as to minimizing $||w||$
+- one approach for optimization is gradient descent
 
 ## Learning from Nearest Neighbors
 
